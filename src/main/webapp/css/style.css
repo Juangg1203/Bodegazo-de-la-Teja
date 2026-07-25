@@ -1,0 +1,153 @@
+/* =====================================================================
+   Bodegazo de la Teja - Estilos de marca
+   Paleta: azul oscuro, blanco, gris claro, naranja de acento
+   ===================================================================== */
+
+:root {
+    --bodegazo-azul: #1c1c1c;
+    --bodegazo-azul-claro: #3a3a3a;
+    --bodegazo-naranja: #9a2b1f;
+    --bodegazo-naranja-oscuro: #7a2118;
+    --bodegazo-gris-claro: #f5f6fa;
+    --bodegazo-blanco: #ffffff;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--bodegazo-gris-claro);
+    color: #212529;
+}
+
+main {
+    flex: 1;
+}
+
+.text-accent {
+    color: var(--bodegazo-naranja) !important;
+}
+
+/* ---------- Navbar ---------- */
+.bodegazo-navbar {
+    background-color: var(--bodegazo-azul);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.bodegazo-navbar .nav-link {
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.bodegazo-navbar .nav-link:hover {
+    color: var(--bodegazo-naranja) !important;
+}
+
+.btn-accent {
+    background-color: var(--bodegazo-naranja);
+    border-color: var(--bodegazo-naranja);
+    color: var(--bodegazo-blanco);
+    font-weight: 600;
+}
+
+.btn-accent:hover {
+    background-color: var(--bodegazo-naranja-oscuro);
+    border-color: var(--bodegazo-naranja-oscuro);
+    color: var(--bodegazo-blanco);
+}
+
+.btn-outline-accent {
+    border-color: var(--bodegazo-naranja);
+    color: var(--bodegazo-naranja);
+    font-weight: 600;
+}
+
+.btn-outline-accent:hover {
+    background-color: var(--bodegazo-naranja);
+    color: var(--bodegazo-blanco);
+}
+
+.border-accent {
+    border-color: var(--bodegazo-naranja) !important;
+    border-width: 2px !important;
+}
+
+/* ---------- Hero ---------- */
+.hero-section {
+    background: linear-gradient(135deg, var(--bodegazo-azul) 0%, var(--bodegazo-azul-claro) 100%);
+    color: var(--bodegazo-blanco);
+    padding: 5rem 0;
+}
+
+.hero-section h1 {
+    font-weight: 800;
+}
+
+/* ---------- Cards ---------- */
+.card-bodegazo {
+    border: none;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 16px rgba(10, 37, 64, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-bodegazo:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(10, 37, 64, 0.15);
+}
+
+.icon-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: rgba(242, 140, 40, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    color: var(--bodegazo-naranja);
+}
+
+/* ---------- Footer ---------- */
+.bodegazo-footer {
+    background-color: var(--bodegazo-azul);
+    color: var(--bodegazo-blanco);
+}
+
+.bodegazo-footer a {
+    color: rgba(255, 255, 255, 0.75);
+    text-decoration: none;
+}
+
+.bodegazo-footer a:hover {
+    color: var(--bodegazo-naranja);
+}
+
+.text-light-50 {
+    color: rgba(255, 255, 255, 0.55) !important;
+}
+
+/* ---------- Formularios ---------- */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--bodegazo-naranja);
+    box-shadow: 0 0 0 0.2rem rgba(242, 140, 40, 0.25);
+}
+
+/* ---------- Auth (login) ---------- */
+.auth-card {
+    max-width: 420px;
+    margin: 4rem auto;
+}
+
+/* ---------- Páginas de error ---------- */
+.error-page {
+    text-align: center;
+    padding: 6rem 1rem;
+}
+
+.error-page .error-code {
+    font-size: 6rem;
+    font-weight: 800;
+    color: var(--bodegazo-azul);
+}

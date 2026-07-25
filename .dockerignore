@@ -1,0 +1,14 @@
+target/
+.git/
+.gitignore
+.mvn/
+.idea/
+.settings/
+.classpath
+.project
+*.iml
+*.log
+database/
+README.md
+src/main/webapp/uploads/*
+!src/main/webapp/uploads/.gitkeep
