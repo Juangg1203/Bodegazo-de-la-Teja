@@ -91,7 +91,12 @@
             <version>3.2.1</version>
         </dependency>
 
-        <!-- Generación de PDF (cotizaciones, fichas técnicas) -->
+        <!-- TEMPORAL: comentadas hasta que se construyan cotizaciones en PDF,
+             códigos QR y envío de correos — mientras tanto, cada dependencia
+             de más obliga a Spring a escanear más clases al arrancar, lo que
+             se nota en el plan gratuito de Render (CPU muy limitado).
+             Descomentar cuando se implementen esas funciones.
+
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itext7-core</artifactId>
@@ -99,7 +104,6 @@
             <type>pom</type>
         </dependency>
 
-        <!-- Generación de códigos QR -->
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
@@ -111,11 +115,11 @@
             <version>3.5.3</version>
         </dependency>
 
-        <!-- Envío de correos (cotizaciones) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
+        -->
 
         <!-- ==================== BOOTSTRAP 5 (via WebJars) ==================== -->
         <dependency>
