@@ -45,4 +45,14 @@ EXPOSE 8080
 ENV SPRING_PROFILES_ACTIVE=prod
 ENV UPLOADS_DIR=/app/uploads
 
-ENTRYPOINT ["java", "-jar", "/app/app.war"]
+# Banderas de arranque rápido para el CPU compartido/limitado del plan
+# gratuito de Render: se salta la compilación JIT avanzada (C2) y usa un
+# recolector de basura más liviano, a cambio de un poco de rendimiento
+# en régimen permanente — vale la pena para que el arranque no exceda
+# el tiempo límite de detección de puerto de Render.
+ENTRYPOINT ["java", \
+    "-XX:TieredStopAtLevel=1", \
+    "-XX:+UseSerialGC", \
+    "-Xss512k", \
+    "-Xmx400m", \
+    "-jar", "/app/app.war"]
