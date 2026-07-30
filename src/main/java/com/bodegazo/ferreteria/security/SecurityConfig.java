@@ -97,6 +97,7 @@ public class SecurityConfig {
                 .requestMatchers("/calculadora-mantos", "/calculadora-tejas")
                     .hasAnyRole("EMPLEADO", "JEFE_BODEGA", "ADMINISTRADOR")
                 .requestMatchers("/cotizaciones/**").hasAnyRole("CLIENTE", "EMPLEADO", "JEFE_BODEGA", "ADMINISTRADOR")
+                .requestMatchers("/ventas/**").hasAnyRole("EMPLEADO", "JEFE_BODEGA", "ADMINISTRADOR")
                 .requestMatchers("/inventario/**").hasAnyRole("JEFE_BODEGA", "ADMINISTRADOR")
                 .requestMatchers("/usuarios/**", "/configuracion/**", "/reportes/**").hasRole("ADMINISTRADOR")
                 .requestMatchers("/administracion/**").hasAnyRole("ADMINISTRADOR", "JEFE_BODEGA")

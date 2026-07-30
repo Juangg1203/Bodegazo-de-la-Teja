@@ -46,6 +46,25 @@
             </ul>
           </li>
         </sec:authorize>
+        <sec:authorize access="isAuthenticated()">
+          <li class="nav-item">
+            <a class="nav-link" href="${pageContext.request.contextPath}/cotizaciones/carrito">
+              <i class="bi bi-cart-fill me-1"></i>Carrito
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="${pageContext.request.contextPath}/cotizaciones">
+              <i class="bi bi-file-earmark-text-fill me-1"></i>Cotizaciones
+            </a>
+          </li>
+        </sec:authorize>
+        <sec:authorize access="hasAnyRole('EMPLEADO','JEFE_BODEGA','ADMINISTRADOR')">
+          <li class="nav-item">
+            <a class="nav-link" href="${pageContext.request.contextPath}/ventas">
+              <i class="bi bi-receipt me-1"></i>Ventas
+            </a>
+          </li>
+        </sec:authorize>
         <sec:authorize access="hasAnyRole('ADMINISTRADOR','JEFE_BODEGA')">
           <li class="nav-item">
             <a class="nav-link" href="${pageContext.request.contextPath}/administracion/productos">

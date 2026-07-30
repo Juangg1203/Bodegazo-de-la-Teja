@@ -423,7 +423,7 @@ Bodega) y ajusto la regla antes de construir ese módulo.
 - [x] Catálogo de productos (listado, filtros, ficha de producto)
 - [x] Calculadora de mantos y calculadora de tejas
 - [ ] Módulo de inventario (entradas, salidas, alertas de stock mínimo)
-- [ ] Módulo de ventas y cotizaciones (PDF, envío por correo)
+- [x] Módulo de ventas y cotizaciones (falta PDF y envío por correo — dependencias comentadas temporalmente)
 - [ ] Dashboard administrativo con gráficos
 - [ ] SEO (meta tags, sitemap, robots.txt, Open Graph)
 - [ ] Despliegue en Render

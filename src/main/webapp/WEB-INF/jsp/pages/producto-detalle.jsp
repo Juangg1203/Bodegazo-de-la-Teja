@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <jsp:include page="/WEB-INF/jsp/fragments/head.jsp"/>
 <body>
 <jsp:include page="/WEB-INF/jsp/fragments/navbar.jsp"/>
@@ -80,9 +81,21 @@
               <i class="bi bi-calculator-fill me-1"></i> Calcular cantidad necesaria
             </a>
           </c:if>
-          <a href="${pageContext.request.contextPath}/contacto" class="btn btn-outline-accent">
-            <i class="bi bi-chat-dots-fill me-1"></i> Solicitar cotización
-          </a>
+          <sec:authorize access="isAuthenticated()">
+            <form action="${pageContext.request.contextPath}/cotizaciones/carrito/agregar" method="post" class="d-flex gap-2">
+              <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+              <input type="hidden" name="productoId" value="${producto.id}">
+              <input type="number" name="cantidad" value="1" min="1" step="1" class="form-control" style="width:90px;">
+              <button type="submit" class="btn btn-outline-accent">
+                <i class="bi bi-cart-plus-fill me-1"></i> Agregar a cotización
+              </button>
+            </form>
+          </sec:authorize>
+          <sec:authorize access="!isAuthenticated()">
+            <a href="${pageContext.request.contextPath}/login" class="btn btn-outline-accent">
+              <i class="bi bi-box-arrow-in-right me-1"></i> Inicia sesión para cotizar
+            </a>
+          </sec:authorize>
         </div>
 
         <c:if test="${not empty producto.fichaTecnicaPdf}">
