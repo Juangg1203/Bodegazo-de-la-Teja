@@ -83,6 +83,17 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- ==================== H2 (perfil "render" temporal) ====================
+             Se usa SOLO mientras el arranque contra PostgreSQL en Render sea
+             demasiado lento para su límite de detección de puerto. Los datos
+             se pierden en cada reinicio (la app se "duerme" por inactividad
+             en el plan gratuito). Volver a PostgreSQL cuando ya no haga falta. -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
         <!-- ==================== UTILIDADES ==================== -->
 
         <dependency>

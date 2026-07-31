@@ -41,8 +41,10 @@ USER bodegazo
 EXPOSE 8080
 
 # Perfil de producción activo por defecto; Render lo puede sobreescribir
-# con la variable de entorno SPRING_PROFILES_ACTIVE si se requiere.
-ENV SPRING_PROFILES_ACTIVE=prod
+# TEMPORAL: perfil "render" (H2 en memoria) mientras PostgreSQL tarde
+# demasiado en arrancar dentro del limite de Render. Para volver a
+# PostgreSQL real, cambiar esto a "prod" (y configurar DB_URL, etc.).
+ENV SPRING_PROFILES_ACTIVE=render
 ENV UPLOADS_DIR=/app/uploads
 
 # Banderas de arranque rápido para el CPU compartido/limitado del plan
