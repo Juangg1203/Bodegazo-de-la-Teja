@@ -29,8 +29,8 @@ INSERT INTO usuarios_roles (usuario_id, rol_id)
 INSERT INTO usuarios_roles (usuario_id, rol_id)
     SELECT u.id, r.id FROM usuarios u, roles r WHERE u.correo = 'cliente@bodegazodelateja.com' AND r.nombre = 'CLIENTE';
 
-INSERT INTO clientes (usuario_id, tipo_documento, numero_documento, nombre, apellido, correo)
-    SELECT u.id, 'CC', '0000000000', 'Cliente', 'Prueba', 'cliente@bodegazodelateja.com'
+INSERT INTO clientes (usuario_id, tipo_documento, numero_documento, nombre, apellido, correo, activo)
+    SELECT u.id, 'CC', '0000000000', 'Cliente', 'Prueba', 'cliente@bodegazodelateja.com', TRUE
     FROM usuarios u WHERE u.correo = 'cliente@bodegazodelateja.com';
 
 INSERT INTO categorias (nombre, slug, descripcion, icono, activo) VALUES
