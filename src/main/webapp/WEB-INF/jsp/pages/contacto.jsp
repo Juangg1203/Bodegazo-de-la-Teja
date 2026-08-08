@@ -18,12 +18,26 @@
         <div class="col-md-5">
           <h4 class="fw-bold mb-4">Información de contacto</h4>
           <ul class="list-unstyled">
-            <li class="mb-3"><i class="bi bi-whatsapp text-accent fs-4 me-2"></i>WhatsApp: <span class="text-muted">próximamente</span></li>
-            <li class="mb-3"><i class="bi bi-envelope-fill text-accent fs-4 me-2"></i>Correo: <span class="text-muted">próximamente</span></li>
-            <li class="mb-3"><i class="bi bi-geo-alt-fill text-accent fs-4 me-2"></i>Ubicación: <span class="text-muted">próximamente</span></li>
+            <li class="mb-3">
+              <i class="bi bi-whatsapp text-accent fs-4 me-2"></i>WhatsApp:
+              <a href="https://wa.me/57${empresaWhatsapp}" target="_blank"><c:out value="${empresaWhatsapp}"/></a>
+            </li>
+            <li class="mb-3">
+              <i class="bi bi-telephone-fill text-accent fs-4 me-2"></i>Teléfono:
+              <a href="tel:+57${empresaTelefono}"><c:out value="${empresaTelefono}"/></a>
+            </li>
+            <li class="mb-3">
+              <i class="bi bi-envelope-fill text-accent fs-4 me-2"></i>Correo:
+              <a href="mailto:${empresaCorreo}"><c:out value="${empresaCorreo}"/></a>
+            </li>
+            <li class="mb-3"><i class="bi bi-geo-alt-fill text-accent fs-4 me-2"></i>Ubicación: <c:out value="${empresaDireccion}"/></li>
           </ul>
-          <div class="ratio ratio-4x3 rounded overflow-hidden mt-4 bg-light d-flex align-items-center justify-content-center text-muted">
-            <span><i class="bi bi-map fs-1"></i><br>Mapa de Google Maps (próximamente)</span>
+          <div class="ratio ratio-4x3 rounded overflow-hidden mt-4">
+            <iframe
+                src="https://www.google.com/maps?q=${empresaDireccionUrl}&output=embed"
+                style="border:0;" allowfullscreen="" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
           </div>
         </div>
 

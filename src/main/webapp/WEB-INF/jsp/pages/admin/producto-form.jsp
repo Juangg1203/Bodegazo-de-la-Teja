@@ -81,7 +81,7 @@
                 <input type="text" class="form-control" name="unidadMedida" value="${not empty form.unidadMedida ? form.unidadMedida : 'unidad'}" maxlength="20">
               </div>
               <div class="col-md-6">
-                <label class="form-label fw-semibold">Marca</label>
+                <label class="form-label fw-semibold">Marca / Fabricante</label>
                 <select class="form-select" name="marcaId">
                   <option value="">Sin marca</option>
                   <c:forEach var="m" items="${marcas}">

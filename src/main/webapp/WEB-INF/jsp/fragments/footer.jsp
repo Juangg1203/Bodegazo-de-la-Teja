@@ -1,10 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <footer class="bodegazo-footer mt-auto pt-5 pb-4">
   <div class="container">
     <div class="row gy-4">
       <div class="col-md-4">
         <span class="bg-white rounded px-2 py-1 d-inline-flex align-items-center mb-3">
-          <img src="${pageContext.request.contextPath}/images/logo-bodegazo.png" alt="Bodegazo de la Teja" height="36">
+          <img src="${pageContext.request.contextPath}/images/logo-bodegazo.png" alt="Bodegazo de la Teja" height="48">
         </span>
         <p class="small text-light-50">Impermeabilizaciones y tejas UPVC de calidad para tu proyecto, desde la venta hasta el asesoramiento técnico.</p>
       </div>
@@ -28,9 +29,24 @@
       <div class="col-md-3">
         <h6 class="fw-bold mb-3">Contáctanos</h6>
         <ul class="list-unstyled small">
-          <li><i class="bi bi-whatsapp me-2 text-accent"></i>WhatsApp</li>
-          <li><i class="bi bi-envelope-fill me-2 text-accent"></i>Correo</li>
-          <li><i class="bi bi-geo-alt-fill me-2 text-accent"></i>Ubicación</li>
+          <li>
+            <i class="bi bi-whatsapp me-2 text-accent"></i>
+            <a href="https://wa.me/57${empresaWhatsapp}" target="_blank" class="text-light-50">
+              <c:out value="${empresaWhatsapp}"/>
+            </a>
+          </li>
+          <li>
+            <i class="bi bi-envelope-fill me-2 text-accent"></i>
+            <a href="mailto:${empresaCorreo}" class="text-light-50"><c:out value="${empresaCorreo}"/></a>
+          </li>
+          <li>
+            <i class="bi bi-geo-alt-fill me-2 text-accent"></i>
+            <span class="text-light-50"><c:out value="${empresaDireccion}"/></span>
+          </li>
+          <li>
+            <i class="bi bi-telephone-fill me-2 text-accent"></i>
+            <a href="tel:+57${empresaTelefono}" class="text-light-50"><c:out value="${empresaTelefono}"/></a>
+          </li>
         </ul>
       </div>
     </div>
@@ -40,7 +56,7 @@
       <div class="d-flex align-items-center gap-2">
         <span class="small text-light-50">Nuestra línea de impermeabilizantes:</span>
         <span class="bg-white rounded px-2 py-1 d-inline-flex align-items-center">
-          <img src="${pageContext.request.contextPath}/images/logo-bodegon-manto.png" alt="El Bodegón del Manto" height="22">
+          <img src="${pageContext.request.contextPath}/images/logo-bodegon-manto.png" alt="El Bodegón del Manto" height="32">
         </span>
       </div>
     </div>

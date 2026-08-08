@@ -9,9 +9,14 @@
   <div class="container py-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h1 class="fw-bold mb-0">Cotización #<c:out value="${cotizacion.id}"/></h1>
-      <a href="${pageContext.request.contextPath}/cotizaciones" class="btn btn-outline-accent">
-        <i class="bi bi-arrow-left me-1"></i> Volver
-      </a>
+      <div class="d-flex gap-2">
+        <a href="${pageContext.request.contextPath}/cotizaciones/${cotizacion.id}/pdf" target="_blank" class="btn btn-accent">
+          <i class="bi bi-file-earmark-pdf-fill me-1"></i> Descargar PDF
+        </a>
+        <a href="${pageContext.request.contextPath}/cotizaciones" class="btn btn-outline-accent">
+          <i class="bi bi-arrow-left me-1"></i> Volver
+        </a>
+      </div>
     </div>
 
     <c:if test="${not empty mensaje}">

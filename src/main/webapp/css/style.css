@@ -151,3 +151,163 @@ main {
     font-weight: 800;
     color: var(--bodegazo-azul);
 }
+
+/* =====================================================================
+   INTERACTIVIDAD
+   ===================================================================== */
+
+/* ---------- Barra de carga (arriba de la página, al navegar) ---------- */
+#barra-carga {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0;
+    background: linear-gradient(90deg, var(--bodegazo-naranja), var(--bodegazo-naranja-oscuro));
+    z-index: 2000;
+    opacity: 0;
+    transition: width 0.4s ease, opacity 0.2s ease;
+}
+
+#barra-carga.activa {
+    width: 85%;
+    opacity: 1;
+    transition: width 6s cubic-bezier(0.1, 0.5, 0.1, 1), opacity 0.2s ease;
+}
+
+/* ---------- Botones: hover con elevación y transición suave ---------- */
+.btn {
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-accent:hover,
+.btn-outline-accent:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(242, 140, 40, 0.35);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn:disabled {
+    transform: none;
+    box-shadow: none;
+}
+
+/* ---------- Navbar: subrayado animado en los enlaces ---------- */
+.bodegazo-navbar .nav-link {
+    position: relative;
+}
+
+.bodegazo-navbar .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 2px;
+    width: 0;
+    height: 2px;
+    background-color: var(--bodegazo-naranja);
+    transition: width 0.25s ease, left 0.25s ease;
+}
+
+.bodegazo-navbar .nav-link:hover::after {
+    width: 70%;
+    left: 15%;
+}
+
+/* ---------- Tarjetas: hover más marcado ---------- */
+.card-bodegazo {
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.card-bodegazo:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(10, 37, 64, 0.15);
+}
+
+/* ---------- Filas de tabla: resalte suave al pasar el cursor ---------- */
+.table-hover tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(242, 140, 40, 0.06);
+}
+
+/* ---------- Enlaces dentro del contenido: color de acento al pasar el cursor ---------- */
+main a:not(.btn):not(.nav-link):not(.dropdown-item):not(.page-link) {
+    transition: color 0.15s ease;
+}
+
+main a:not(.btn):not(.nav-link):not(.dropdown-item):not(.page-link):hover {
+    color: var(--bodegazo-naranja-oscuro);
+}
+
+/* ---------- Íconos circulares (inicio): pequeño "pop" al pasar el cursor ---------- */
+.icon-circle {
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.card-bodegazo:hover .icon-circle {
+    transform: scale(1.1);
+}
+
+/* ---------- Badges de estado: pulso sutil para "stock bajo" / alertas ---------- */
+@keyframes pulso-suave {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+.badge.bg-danger {
+    animation: pulso-suave 2s ease-in-out infinite;
+}
+
+/* ---------- Imágenes de producto: zoom suave al pasar el cursor ---------- */
+.card-bodegazo img {
+    transition: transform 0.3s ease;
+}
+
+.card-bodegazo:hover img {
+    transform: scale(1.04);
+}
+
+/* ---------- Inputs: leve elevación al enfocar ---------- */
+.form-control,
+.form-select {
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* ---------- Muestras de color (selector de color de teja) ---------- */
+.color-swatch {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+    box-shadow: inset 0 0 0 2px rgba(255,255,255,0.6);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.color-swatch:hover {
+    transform: scale(1.12);
+}
+
+.color-radio:checked + .color-swatch {
+    box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--bodegazo-naranja);
+    transform: scale(1.12);
+}
+
+/* ---------- Simulador visual del techo ---------- */
+.simulador-teja {
+    box-shadow: inset 0 -4px 6px rgba(0,0,0,0.15);
+    position: relative;
+}
+
+.simulador-teja::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.25), transparent 40%, rgba(0,0,0,0.10));
+    pointer-events: none;
+}

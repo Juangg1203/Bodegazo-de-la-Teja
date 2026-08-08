@@ -7,11 +7,15 @@ import com.bodegazo.ferreteria.entity.Cliente;
 import com.bodegazo.ferreteria.repository.ClienteRepository;
 import com.bodegazo.ferreteria.security.CustomUserPrincipal;
 import com.bodegazo.ferreteria.service.CotizacionService;
+import com.bodegazo.ferreteria.utils.PdfGeneratorUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Collections;
@@ -37,10 +42,13 @@ public class CotizacionController {
 
     private final CotizacionService cotizacionService;
     private final ClienteRepository clienteRepository;
+    private final PdfGeneratorUtil pdfGeneratorUtil;
 
-    public CotizacionController(CotizacionService cotizacionService, ClienteRepository clienteRepository) {
+    public CotizacionController(CotizacionService cotizacionService, ClienteRepository clienteRepository,
+                                 PdfGeneratorUtil pdfGeneratorUtil) {
         this.cotizacionService = cotizacionService;
         this.clienteRepository = clienteRepository;
+        this.pdfGeneratorUtil = pdfGeneratorUtil;
     }
 
     private boolean esPersonal(CustomUserPrincipal usuario) {
@@ -80,6 +88,18 @@ public class CotizacionController {
         model.addAttribute("cotizacion", detalle);
         model.addAttribute("esPersonal", esPersonal(usuario));
         return "pages/cotizacion-detalle";
+    }
+
+    @GetMapping("/cotizaciones/{id}/pdf")
+    @ResponseBody
+    public ResponseEntity<byte[]> descargarPdf(@PathVariable Long id) {
+        CotizacionDetalleDTO detalle = cotizacionService.obtenerDetalle(id);
+        byte[] pdf = pdfGeneratorUtil.generarCotizacionPdf(detalle);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=cotizacion-" + id + ".pdf")
+                .body(pdf);
     }
 
     @PostMapping("/cotizaciones/confirmar")

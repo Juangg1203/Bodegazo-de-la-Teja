@@ -3,11 +3,16 @@ package com.bodegazo.ferreteria.controller;
 import com.bodegazo.ferreteria.dto.CalculoMantoResultDTO;
 import com.bodegazo.ferreteria.dto.CalculoTejaResultDTO;
 import com.bodegazo.ferreteria.service.CalculoService;
+import com.bodegazo.ferreteria.utils.PdfGeneratorUtil;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.math.BigDecimal;
 
@@ -20,9 +25,11 @@ import java.math.BigDecimal;
 public class CalculadoraController {
 
     private final CalculoService calculoService;
+    private final PdfGeneratorUtil pdfGeneratorUtil;
 
-    public CalculadoraController(CalculoService calculoService) {
+    public CalculadoraController(CalculoService calculoService, PdfGeneratorUtil pdfGeneratorUtil) {
         this.calculoService = calculoService;
+        this.pdfGeneratorUtil = pdfGeneratorUtil;
     }
 
     @GetMapping("/calculadora-mantos")
@@ -59,10 +66,16 @@ public class CalculadoraController {
             @RequestParam BigDecimal largo,
             @RequestParam BigDecimal ancho,
             @RequestParam(defaultValue = "COLONIAL") String tipoTeja,
+            @RequestParam(required = false) String color,
             Model model) {
 
         model.addAttribute("pageTitle", "Calculadora de Tejas");
         model.addAttribute("tipoTejaSeleccionado", tipoTeja);
+
+        String colorFinal = (color != null && !color.isBlank())
+                ? color
+                : ("TRAPEZOIDAL".equalsIgnoreCase(tipoTeja) ? "BLANCA" : "TERRACOTA");
+        model.addAttribute("colorSeleccionado", colorFinal);
 
         if (!dimensionesValidas(largo, ancho, model)) {
             return "pages/calculadora-tejas";
@@ -71,6 +84,22 @@ public class CalculadoraController {
         CalculoTejaResultDTO resultado = calculoService.calcularTejas(largo, ancho, tipoTeja);
         model.addAttribute("resultado", resultado);
         return "pages/calculadora-tejas";
+    }
+
+    @PostMapping("/calculadora-tejas/pdf")
+    @ResponseBody
+    public ResponseEntity<byte[]> descargarFormatoTejasPdf(
+            @RequestParam BigDecimal largo,
+            @RequestParam BigDecimal ancho,
+            @RequestParam(defaultValue = "COLONIAL") String tipoTeja) {
+
+        CalculoTejaResultDTO resultado = calculoService.calcularTejas(largo, ancho, tipoTeja);
+        byte[] pdf = pdfGeneratorUtil.generarFormatoTejasPdf(resultado);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=formato-corte-tejas.pdf")
+                .body(pdf);
     }
 
     private boolean dimensionesValidas(BigDecimal largo, BigDecimal ancho, Model model) {

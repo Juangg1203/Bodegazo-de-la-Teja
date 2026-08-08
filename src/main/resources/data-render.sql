@@ -44,6 +44,10 @@ INSERT INTO marcas (nombre, descripcion, activo) VALUES
 
 INSERT INTO configuraciones (clave, valor, descripcion) VALUES
     ('EMPRESA_NOMBRE', 'Bodegazo de la Teja', 'Nombre comercial de la empresa'),
+    ('EMPRESA_TELEFONO', '3177042437', 'Telefono principal de contacto'),
+    ('EMPRESA_WHATSAPP', '3176944377', 'Numero de WhatsApp para atencion al cliente'),
+    ('EMPRESA_CORREO', 'elbodegondelmanto@hotmail.com', 'Correo de contacto'),
+    ('EMPRESA_DIRECCION', 'CRA 17F #60-06, Ricaurte, Bucaramanga', 'Direccion fisica de la empresa'),
     ('IVA_PORCENTAJE', '19', 'Porcentaje de IVA aplicado a ventas y cotizaciones'),
     ('MANTO_TRASLAPO_M', '0.80', 'Traslapo obligatorio en metros para calculo de mantos'),
     ('MANTO_ANCHO_ROLLO_M', '1.00', 'Ancho estandar de un rollo de manto impermeabilizante'),
@@ -51,6 +55,7 @@ INSERT INTO configuraciones (clave, valor, descripcion) VALUES
     ('MANTO_PRECIO_REFERENCIA', '85000', 'Precio de referencia por rollo de manto'),
     ('TEJA_COLONIAL_LARGO_MODULO_M', '5.90', 'Largo estandar de una teja UPVC Colonial'),
     ('TEJA_COLONIAL_ANCHO_MODULO_M', '1.05', 'Ancho estandar de una teja UPVC Colonial'),
+    ('TEJA_COLONIAL_ANCHO_BARRIGA_CM', '22', 'Distancia entre barrigas (ondas) de la teja Colonial, en centimetros'),
     ('TEJA_COLONIAL_TRASLAPO_LATERAL_CM', '10', 'Traslapo lateral en centimetros para teja Colonial'),
     ('TEJA_COLONIAL_TRASLAPO_LONGITUDINAL_CM', '22', 'Traslapo longitudinal en centimetros para teja Colonial'),
     ('TEJA_COLONIAL_PRECIO_REFERENCIA', '99000', 'Precio de referencia por teja Colonial'),
@@ -136,3 +141,439 @@ WHERE p.codigo IN (
     'TTRANS-590',
     'MIPA3000','MCOL2','MMET2'
 );
+
+-- =====================================================================
+-- PRODUCTOS ADICIONALES (impermeabilizantes, mantos, cintas, tejas, accesorios)
+-- =====================================================================
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'EMU-FIB-14', 'Emulsion Fiberglass 1/4 galon', 'Emulsion asfaltica Fiberglass, presentacion de 1/4 de galon.', 'IMPERMEABILIZANTE', c.id, m.id, 28000, 20160, '1/4 galon', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'EMU-FIB-1G', 'Emulsion Fiberglass 1 galon', 'Emulsion asfaltica Fiberglass, presentacion de 1 galon.', 'IMPERMEABILIZANTE', c.id, m.id, 88000, 63360, 'galon', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'EMU-FIB-MC', 'Emulsion Fiberglass medio cuñete', 'Emulsion asfaltica Fiberglass, presentacion de medio cuñete.', 'IMPERMEABILIZANTE', c.id, m.id, 260000, 187200, 'medio cuñete', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'EMU-FIB-CU', 'Emulsion Fiberglass cuñete', 'Emulsion asfaltica Fiberglass, presentacion de cuñete completo.', 'IMPERMEABILIZANTE', c.id, m.id, 460000, 331200, 'cuñete', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'EMU-SIK-MG', 'Emulsion Sika medio galon', 'Emulsion asfaltica Sika, presentacion de medio galon.', 'IMPERMEABILIZANTE', c.id, m.id, 48000, 34560, 'medio galon', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'EMU-SIK-1G', 'Emulsion Sika 1 galon', 'Emulsion asfaltica Sika, presentacion de 1 galon.', 'IMPERMEABILIZANTE', c.id, m.id, 88000, 63360, 'galon', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'EMU-SIK-BA', 'Emulsion Sika balde', 'Emulsion asfaltica Sika, presentacion en balde.', 'IMPERMEABILIZANTE', c.id, m.id, 95000, 68400, 'balde', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'EMU-SIK-CU', 'Emulsion Sika cuñete', 'Emulsion asfaltica Sika, presentacion de cuñete completo.', 'IMPERMEABILIZANTE', c.id, m.id, 460000, 331200, 'cuñete', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'ALU-IPA-14', 'Alumol IPA 1/4 galon', 'Pintura reflectiva de aluminio Alumol IPA, presentacion de 1/4 de galon.', 'IMPERMEABILIZANTE', c.id, m.id, 28000, 20160, '1/4 galon', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'ALU-IPA-MG', 'Alumol IPA medio galon', 'Pintura reflectiva de aluminio Alumol IPA, presentacion de medio galon.', 'IMPERMEABILIZANTE', c.id, m.id, 48000, 34560, 'medio galon', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'ALU-IPA-1G', 'Alumol IPA galon', 'Pintura reflectiva de aluminio Alumol IPA, presentacion de 1 galon.', 'IMPERMEABILIZANTE', c.id, m.id, 88000, 63360, 'galon', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'ALU-IPA-MC', 'Alumol IPA medio cuñete', 'Pintura reflectiva de aluminio Alumol IPA, presentacion de medio cuñete.', 'IMPERMEABILIZANTE', c.id, m.id, 260000, 187200, 'medio cuñete', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'ALU-IPA-CU', 'Alumol IPA cuñete', 'Pintura reflectiva de aluminio Alumol IPA, presentacion de cuñete completo.', 'IMPERMEABILIZANTE', c.id, m.id, 460000, 331200, 'cuñete', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'ASF-LIQ-14', 'Asfalto Liquido 1/4 galon', 'Asfalto liquido impermeabilizante, presentacion de 1/4 de galon.', 'IMPERMEABILIZANTE', c.id, m.id, 28000, 20160, '1/4 galon', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'ASF-LIQ-1G', 'Asfalto Liquido 1 galon', 'Asfalto liquido impermeabilizante, presentacion de 1 galon.', 'IMPERMEABILIZANTE', c.id, m.id, 88000, 63360, 'galon', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'ASF-LIQ-MC', 'Asfalto Liquido medio cuñete', 'Asfalto liquido impermeabilizante, presentacion de medio cuñete.', 'IMPERMEABILIZANTE', c.id, m.id, 260000, 187200, 'medio cuñete', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'ASF-LIQ-CU', 'Asfalto Liquido cuñete', 'Asfalto liquido impermeabilizante, presentacion de cuñete completo.', 'IMPERMEABILIZANTE', c.id, m.id, 460000, 331200, 'cuñete', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'CEM-IPA-1G', 'Cemento Plastico IPA 1 galon', 'Cemento plastico impermeabilizante IPA, presentacion de 1 galon.', 'IMPERMEABILIZANTE', c.id, m.id, 88000, 63360, 'galon', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'CEM-IPA-CU', 'Cemento Plastico IPA cuñete', 'Cemento plastico impermeabilizante IPA, presentacion de cuñete completo.', 'IMPERMEABILIZANTE', c.id, m.id, 460000, 331200, 'cuñete', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'IMPAC7000-1G', 'IMPAC 7000 1 galon', 'Impermeabilizante IMPAC 7000, presentacion de 1 galon.', 'IMPERMEABILIZANTE', c.id, m.id, 88000, 63360, 'galon', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'IMPAC7000-CU', 'IMPAC 7000 cuñete', 'Impermeabilizante IMPAC 7000, presentacion de cuñete completo.', 'IMPERMEABILIZANTE', c.id, m.id, 460000, 331200, 'cuñete', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'SIKAF7-1G', 'Sikafill 7 Años 1 galon', 'Impermeabilizante Sikafill 7 Años, presentacion de 1 galon.', 'IMPERMEABILIZANTE', c.id, m.id, 88000, 63360, 'galon', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'SIKAF7-CU', 'Sikafill 7 Años cuñete', 'Impermeabilizante Sikafill 7 Años, presentacion de cuñete completo.', 'IMPERMEABILIZANTE', c.id, m.id, 460000, 331200, 'cuñete', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'SIKAF100-1G', 'Sikafill 100 Super Gris 1 galon', 'Impermeabilizante Sikafill 100 Super Gris, presentacion de 1 galon.', 'IMPERMEABILIZANTE', c.id, m.id, 88000, 63360, 'galon', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'SIKAF100-CU', 'Sikafill 100 Super Gris cuñete', 'Impermeabilizante Sikafill 100 Super Gris, presentacion de cuñete completo.', 'IMPERMEABILIZANTE', c.id, m.id, 460000, 331200, 'cuñete', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'IMPTX7-1G', 'Impertexas 7 Años Gris 1 galon', 'Impermeabilizante Impertexas 7 Años color gris, presentacion de 1 galon.', 'IMPERMEABILIZANTE', c.id, m.id, 88000, 63360, 'galon', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'IMPTX7-CU', 'Impertexas 7 Años Gris cuñete', 'Impermeabilizante Impertexas 7 Años color gris, presentacion de cuñete completo.', 'IMPERMEABILIZANTE', c.id, m.id, 460000, 331200, 'cuñete', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'MTX-2', 'Manto Metalex Fiberglass 2.0mm', 'Manto impermeabilizante Manto Metalex Fiberglass, 2.0 mm de grosor.', 'IMPERMEABILIZANTE', c.id, m.id, 96000, 69120, 'rollo', 10.0, 1.0, 2.0, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'MTX-25', 'Manto Metalex Fiberglass 2.5mm', 'Manto impermeabilizante Manto Metalex Fiberglass, 2.5 mm de grosor.', 'IMPERMEABILIZANTE', c.id, m.id, 100500, 72360, 'rollo', 10.0, 1.0, 2.5, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'MCOL-FIB-2', 'Manto Colombia Fiberglass 2.0mm', 'Manto impermeabilizante Manto Colombia Fiberglass, 2.0 mm de grosor.', 'IMPERMEABILIZANTE', c.id, m.id, 96000, 69120, 'rollo', 10.0, 1.0, 2.0, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'MCOL-FIB-25', 'Manto Colombia Fiberglass 2.5mm', 'Manto impermeabilizante Manto Colombia Fiberglass, 2.5 mm de grosor.', 'IMPERMEABILIZANTE', c.id, m.id, 100500, 72360, 'rollo', 10.0, 1.0, 2.5, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'MIPA-25', 'Manto IPA 2.5mm', 'Manto impermeabilizante Manto IPA, 2.5 mm de grosor.', 'IMPERMEABILIZANTE', c.id, m.id, 100500, 72360, 'rollo', 10.0, 1.0, 2.5, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'MIPA-27', 'Manto IPA 2.7mm', 'Manto impermeabilizante Manto IPA, 2.7 mm de grosor.', 'IMPERMEABILIZANTE', c.id, m.id, 102300, 73656, 'rollo', 10.0, 1.0, 2.7, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'MROOF3000', 'Manto Roofer 3000 2.5mm', 'Manto impermeabilizante Manto Roofer 3000, 2.5 mm de grosor.', 'IMPERMEABILIZANTE', c.id, m.id, 100500, 72360, 'rollo', 10.0, 1.0, 2.5, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'MROOF2500', 'Manto Roofer 2500 2.0mm', 'Manto impermeabilizante Manto Roofer 2500, 2.0 mm de grosor.', 'IMPERMEABILIZANTE', c.id, m.id, 96000, 69120, 'rollo', 10.0, 1.0, 2.0, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'MROOF3500', 'Manto Roofer 3500 3.0mm', 'Manto impermeabilizante Manto Roofer 3500, 3.0 mm de grosor.', 'IMPERMEABILIZANTE', c.id, m.id, 105000, 75600, 'rollo', 10.0, 1.0, 3.0, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'MEDIL-ATV100', 'Manto Edil ATV100 2.5mm', 'Manto impermeabilizante Manto Edil ATV100, 2.5 mm de grosor.', 'IMPERMEABILIZANTE', c.id, m.id, 100500, 72360, 'rollo', 10.0, 1.0, 2.5, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'MEDIL-ATV30', 'Manto Edil ATV30 3.0mm', 'Manto impermeabilizante Manto Edil ATV30, 3.0 mm de grosor.', 'IMPERMEABILIZANTE', c.id, m.id, 105000, 75600, 'rollo', 10.0, 1.0, 3.0, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'MADH-NEGRO', 'Manto Adhesivo Negro 2.0mm', 'Manto impermeabilizante Manto Adhesivo Negro, 2.0 mm de grosor.', 'IMPERMEABILIZANTE', c.id, m.id, 96000, 69120, 'rollo', 10.0, 1.0, 2.0, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'MFIB-XT500', 'Manto Fiberglass XT500 2.8mm', 'Manto impermeabilizante Manto Fiberglass XT500, 2.8 mm de grosor.', 'IMPERMEABILIZANTE', c.id, m.id, 103200, 74304, 'rollo', 10.0, 1.0, 2.8, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'MTEX-ALU-2', 'Manto Texsa Aluadhesivo 2mm', 'Manto Texsa aluminizado autoadhesivo, 2mm de grosor. Presentacion de 10 m2 (1.10 x 9.20 m).', 'IMPERMEABILIZANTE', c.id, m.id, 96000, 69120, 'rollo', 9.2, 1.1, 2.0, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'MTEX-ADH-NEGRO', 'Manto Adhesivo Texsa Negro 1.5mm', 'Manto Texsa autoadhesivo color negro, 1.5mm de grosor. Presentacion de 20 m2 (1.10 x 18 m).', 'IMPERMEABILIZANTE', c.id, m.id, 183000, 131760, 'rollo', 18.0, 1.1, 1.5, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'CINTA-TXS-10', 'Cinta Flanche Texsa 10cm', 'Cinta flanche autoadhesiva Texsa, 10 cm de ancho x 10 m de largo, 1.5 mm de grosor.', 'ACCESORIO', c.id, m.id, 25000, 18000, 'rollo', 10.0, 0.1, 1.5, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'accesorios' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'CINTA-TXS-15', 'Cinta Flanche Texsa 15cm', 'Cinta flanche autoadhesiva Texsa, 15 cm de ancho x 10 m de largo, 1.5 mm de grosor.', 'ACCESORIO', c.id, m.id, 28500, 20520, 'rollo', 10.0, 0.15, 1.5, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'accesorios' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'CINTA-TXS-20', 'Cinta Flanche Texsa 20cm', 'Cinta flanche autoadhesiva Texsa, 20 cm de ancho x 10 m de largo, 1.5 mm de grosor.', 'ACCESORIO', c.id, m.id, 32000, 23040, 'rollo', 10.0, 0.2, 1.5, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'accesorios' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'CINTA-TXS-33', 'Cinta Flanche Texsa 33cm', 'Cinta flanche autoadhesiva Texsa, 33 cm de ancho x 10 m de largo, 1.5 mm de grosor.', 'ACCESORIO', c.id, m.id, 41100, 29592, 'rollo', 10.0, 0.33, 1.5, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'accesorios' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'CINTA-EDIL-10', 'Cinta Flanche Edil 10cm', 'Cinta flanche autoadhesiva Edil, 10 cm de ancho x 10 m de largo, 2.0 mm de grosor.', 'ACCESORIO', c.id, m.id, 25000, 18000, 'rollo', 10.0, 0.1, 2.0, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'accesorios' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'CINTA-EDIL-15', 'Cinta Flanche Edil 15cm', 'Cinta flanche autoadhesiva Edil, 15 cm de ancho x 10 m de largo, 2.0 mm de grosor.', 'ACCESORIO', c.id, m.id, 28500, 20520, 'rollo', 10.0, 0.15, 2.0, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'accesorios' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'CINTA-EDIL-30', 'Cinta Flanche Edil 30cm', 'Cinta flanche autoadhesiva Edil, 30 cm de ancho x 10 m de largo, 2.0 mm de grosor.', 'ACCESORIO', c.id, m.id, 39000, 28080, 'rollo', 10.0, 0.3, 2.0, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'accesorios' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'TCOL-590-TER', 'Teja Colonial Terracota 5.90m', 'Teja UPVC estilo colonial, color terracota, 5.90 x 1.05 m.', 'TEJA_UPVC', c.id, m.id, 95000, 68400, 'unidad', 5.9, 1.05, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'tejas-upvc' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'TCOL-590-NAR', 'Teja Colonial Naranja 5.90m', 'Teja UPVC estilo colonial, color naranja, 5.90 x 1.05 m.', 'TEJA_UPVC', c.id, m.id, 95000, 68400, 'unidad', 5.9, 1.05, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'tejas-upvc' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'TCOL-590-NEG', 'Teja Colonial Negra 5.90m', 'Teja UPVC estilo colonial, color negra, 5.90 x 1.05 m.', 'TEJA_UPVC', c.id, m.id, 95000, 68400, 'unidad', 5.9, 1.05, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'tejas-upvc' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'TCOL-590-TRP', 'Teja Colonial Transparente 5.90m', 'Teja UPVC estilo colonial, color transparente, 5.90 x 1.05 m.', 'TEJA_UPVC', c.id, m.id, 95000, 68400, 'unidad', 5.9, 1.05, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'tejas-upvc' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'TCOL-590-TRL', 'Teja Colonial Traslucida 5.90m', 'Teja UPVC estilo colonial, color traslucida, 5.90 x 1.05 m.', 'TEJA_UPVC', c.id, m.id, 95000, 68400, 'unidad', 5.9, 1.05, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'tejas-upvc' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'TCOL-1180-NAR', 'Teja Colonial Naranja 11.80m', 'Teja UPVC estilo colonial, color naranja, 11.80 x 1.05 m.', 'TEJA_UPVC', c.id, m.id, 178000, 128160, 'unidad', 11.8, 1.05, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'tejas-upvc' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'TCOL-1180-TER', 'Teja Colonial Terracota 11.80m', 'Teja UPVC estilo colonial, color terracota, 11.80 x 1.05 m.', 'TEJA_UPVC', c.id, m.id, 178000, 128160, 'unidad', 11.8, 1.05, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'tejas-upvc' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'TTA-590-AZU', 'Teja Trapezoidal Cresta Alta Azul 5.9m', 'Teja UPVC trapezoidal cresta alta, color azul, 5.9 x 1.10 m, 2.5mm de grosor.', 'TEJA_UPVC', c.id, m.id, 95000, 68400, 'unidad', 5.9, 1.1, 2.5, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'tejas-upvc' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'TTA-1180-AZU', 'Teja Trapezoidal Cresta Alta Azul 11.8m', 'Teja UPVC trapezoidal cresta alta, color azul, 11.8 x 1.10 m, 2.5mm de grosor.', 'TEJA_UPVC', c.id, m.id, 178000, 128160, 'unidad', 11.8, 1.1, 2.5, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'tejas-upvc' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'TTA-590-ROJ', 'Teja Trapezoidal Cresta Alta Roja 5.9m', 'Teja UPVC trapezoidal cresta alta, color roja, 5.9 x 1.10 m, 2.5mm de grosor.', 'TEJA_UPVC', c.id, m.id, 95000, 68400, 'unidad', 5.9, 1.1, 2.5, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'tejas-upvc' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'TTA-1180-ROJ', 'Teja Trapezoidal Cresta Alta Roja 11.8m', 'Teja UPVC trapezoidal cresta alta, color roja, 11.8 x 1.10 m, 2.5mm de grosor.', 'TEJA_UPVC', c.id, m.id, 178000, 128160, 'unidad', 11.8, 1.1, 2.5, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'tejas-upvc' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'TTA-590-VER', 'Teja Trapezoidal Cresta Alta Verde 5.9m', 'Teja UPVC trapezoidal cresta alta, color verde, 5.9 x 1.10 m, 2.5mm de grosor.', 'TEJA_UPVC', c.id, m.id, 95000, 68400, 'unidad', 5.9, 1.1, 2.5, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'tejas-upvc' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'TTA-1180-VER', 'Teja Trapezoidal Cresta Alta Verde 11.8m', 'Teja UPVC trapezoidal cresta alta, color verde, 11.8 x 1.10 m, 2.5mm de grosor.', 'TEJA_UPVC', c.id, m.id, 178000, 128160, 'unidad', 11.8, 1.1, 2.5, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'tejas-upvc' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'TTA-590-BLA', 'Teja Trapezoidal Cresta Alta Blanca 5.9m', 'Teja UPVC trapezoidal cresta alta, color blanca, 5.9 x 1.10 m, 2.5mm de grosor.', 'TEJA_UPVC', c.id, m.id, 95000, 68400, 'unidad', 5.9, 1.1, 2.5, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'tejas-upvc' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'TTA-1180-BLA', 'Teja Trapezoidal Cresta Alta Blanca 11.8m', 'Teja UPVC trapezoidal cresta alta, color blanca, 11.8 x 1.10 m, 2.5mm de grosor.', 'TEJA_UPVC', c.id, m.id, 178000, 128160, 'unidad', 11.8, 1.1, 2.5, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'tejas-upvc' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'TTA-590-TRP-15', 'Teja Trapezoidal Cresta Alta Transparente 5.90m', 'Teja UPVC trapezoidal cresta alta, color transparente, 5.90 x 1.10 m, 1.5mm de grosor (ideal para iluminacion natural).', 'TEJA_UPVC', c.id, m.id, 95000, 68400, 'unidad', 5.9, 1.1, 1.5, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'tejas-upvc' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'TTA-590-TRL-15', 'Teja Trapezoidal Cresta Alta Traslucida 5.90m', 'Teja UPVC trapezoidal cresta alta, color traslucida, 5.90 x 1.10 m, 1.5mm de grosor (ideal para iluminacion natural).', 'TEJA_UPVC', c.id, m.id, 95000, 68400, 'unidad', 5.9, 1.1, 1.5, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'tejas-upvc' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'TCB-590-BLA', 'Teja Trapezoidal Cresta Baja Blanca 5.90m', 'Teja UPVC trapezoidal cresta baja, color blanco, 5.90 x 1.10 m.', 'TEJA_UPVC', c.id, m.id, 95000, 68400, 'unidad', 5.9, 1.1, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'tejas-upvc' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'CAB-COL-NAR', 'Caballete Colonial Naranja', 'Caballete de remate para teja Colonial, color naranja.', 'ACCESORIO', c.id, m.id, 22000, 15840, 'unidad', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'accesorios' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'CAB-COL-TER', 'Caballete Colonial Terracota', 'Caballete de remate para teja Colonial, color terracota.', 'ACCESORIO', c.id, m.id, 22000, 15840, 'unidad', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'accesorios' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'CAB-TRA-BLA', 'Caballete Trapezoidal Blanco', 'Caballete de remate para teja Trapezoidal, color blanco.', 'ACCESORIO', c.id, m.id, 22000, 15840, 'unidad', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'accesorios' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'CAB-TRA-AZU', 'Caballete Trapezoidal Azul', 'Caballete de remate para teja Trapezoidal, color azul.', 'ACCESORIO', c.id, m.id, 22000, 15840, 'unidad', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'accesorios' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'LIM-COL-NAR', 'Limatesa Colonial Naranja', 'Limatesa para teja Colonial, color naranja.', 'ACCESORIO', c.id, m.id, 26000, 18720, 'unidad', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'accesorios' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'LIM-COL-TER', 'Limatesa Colonial Terracota', 'Limatesa para teja Colonial, color terracota.', 'ACCESORIO', c.id, m.id, 26000, 18720, 'unidad', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'accesorios' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'TOR-25', 'Tornillo 2.5 pulgadas', 'Tornillo autoperforante para fijacion de teja UPVC, 2.5 pulgadas de largo.', 'ACCESORIO', c.id, m.id, 900, 648, 'unidad', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'accesorios' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'TOR-3', 'Tornillo 3 pulgadas', 'Tornillo autoperforante para fijacion de teja UPVC, 3 pulgadas de largo.', 'ACCESORIO', c.id, m.id, 1100, 792, 'unidad', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'accesorios' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'CAP-CALTA-AZU', 'Capuchon Cresta Alta Azul', 'Capuchon de remate para teja de cresta alta, color azul.', 'ACCESORIO', c.id, m.id, 3500, 2520, 'unidad', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'accesorios' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'CAP-CALTA-NAR', 'Capuchon Cresta Alta Naranja', 'Capuchon de remate para teja de cresta alta, color naranja.', 'ACCESORIO', c.id, m.id, 3500, 2520, 'unidad', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'accesorios' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'CAP-CALTA-ROJ', 'Capuchon Cresta Alta Rojo', 'Capuchon de remate para teja de cresta alta, color rojo.', 'ACCESORIO', c.id, m.id, 3500, 2520, 'unidad', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'accesorios' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'CAP-CALTA-BLA', 'Capuchon Cresta Alta Blanco', 'Capuchon de remate para teja de cresta alta, color blanco.', 'ACCESORIO', c.id, m.id, 3500, 2520, 'unidad', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'accesorios' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'CAP-CALTA-TER', 'Capuchon Cresta Alta Terracota', 'Capuchon de remate para teja de cresta alta, color terracota.', 'ACCESORIO', c.id, m.id, 3500, 2520, 'unidad', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'accesorios' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'CAP-CBAJA-BLA', 'Capuchon Cresta Baja Blanco', 'Capuchon de remate para teja de cresta baja, color blanco.', 'ACCESORIO', c.id, m.id, 3500, 2520, 'unidad', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'accesorios' AND m.nombre = 'Bodegazo UPVC';
+
+INSERT INTO inventario (producto_id, stock_actual, stock_minimo, ubicacion)
+SELECT p.id, 30, 5, 'Bodega principal'
+FROM productos p
+WHERE p.codigo IN ('EMU-FIB-14','EMU-FIB-1G','EMU-FIB-MC','EMU-FIB-CU','EMU-SIK-MG','EMU-SIK-1G','EMU-SIK-BA','EMU-SIK-CU','ALU-IPA-14','ALU-IPA-MG','ALU-IPA-1G','ALU-IPA-MC','ALU-IPA-CU','ASF-LIQ-14','ASF-LIQ-1G','ASF-LIQ-MC','ASF-LIQ-CU','CEM-IPA-1G','CEM-IPA-CU','IMPAC7000-1G','IMPAC7000-CU','SIKAF7-1G','SIKAF7-CU','SIKAF100-1G','SIKAF100-CU','IMPTX7-1G','IMPTX7-CU','MTX-2','MTX-25','MCOL-FIB-2','MCOL-FIB-25','MIPA-25','MIPA-27','MROOF3000','MROOF2500','MROOF3500','MEDIL-ATV100','MEDIL-ATV30','MADH-NEGRO','MFIB-XT500','MTEX-ALU-2','MTEX-ADH-NEGRO','CINTA-TXS-10','CINTA-TXS-15','CINTA-TXS-20','CINTA-TXS-33','CINTA-EDIL-10','CINTA-EDIL-15','CINTA-EDIL-30','TCOL-590-TER','TCOL-590-NAR','TCOL-590-NEG','TCOL-590-TRP','TCOL-590-TRL','TCOL-1180-NAR','TCOL-1180-TER','TTA-590-AZU','TTA-1180-AZU','TTA-590-ROJ','TTA-1180-ROJ','TTA-590-VER','TTA-1180-VER','TTA-590-BLA','TTA-1180-BLA','TTA-590-TRP-15','TTA-590-TRL-15','TCB-590-BLA','CAB-COL-NAR','CAB-COL-TER','CAB-TRA-BLA','CAB-TRA-AZU','LIM-COL-NAR','LIM-COL-TER','TOR-25','TOR-3','CAP-CALTA-AZU','CAP-CALTA-NAR','CAP-CALTA-ROJ','CAP-CALTA-BLA','CAP-CALTA-TER','CAP-CBAJA-BLA');
+
+-- =====================================================================
+-- PASO 2: Manto Gravillado, Sikaflex, marcas reales de fabricante
+-- =====================================================================
+
+-- 1) Marcas nuevas (fabricantes reales)
+INSERT INTO marcas (nombre, descripcion, activo)
+VALUES ('Sika', 'Linea de productos impermeabilizantes y sellantes Sika', TRUE)
+ON CONFLICT (nombre) DO NOTHING;
+
+INSERT INTO marcas (nombre, descripcion, activo)
+VALUES ('Texsa', 'Linea de mantos y cintas impermeabilizantes Texsa', TRUE)
+ON CONFLICT (nombre) DO NOTHING;
+
+INSERT INTO marcas (nombre, descripcion, activo)
+VALUES ('Edil', 'Linea de mantos impermeabilizantes Edil', TRUE)
+ON CONFLICT (nombre) DO NOTHING;
+
+INSERT INTO marcas (nombre, descripcion, activo)
+VALUES ('Roofer', 'Linea de mantos impermeabilizantes Roofer', TRUE)
+ON CONFLICT (nombre) DO NOTHING;
+
+INSERT INTO marcas (nombre, descripcion, activo)
+VALUES ('IPA', 'Linea de productos impermeabilizantes IPA', TRUE)
+ON CONFLICT (nombre) DO NOTHING;
+
+INSERT INTO marcas (nombre, descripcion, activo)
+VALUES ('Fiberglass', 'Linea de emulsiones y mantos Fiberglass', TRUE)
+ON CONFLICT (nombre) DO NOTHING;
+
+INSERT INTO marcas (nombre, descripcion, activo)
+VALUES ('Metalex', 'Linea de mantos impermeabilizantes Metalex', TRUE)
+ON CONFLICT (nombre) DO NOTHING;
+
+INSERT INTO marcas (nombre, descripcion, activo)
+VALUES ('Impac', 'Linea de impermeabilizantes Impac', TRUE)
+ON CONFLICT (nombre) DO NOTHING;
+
+INSERT INTO marcas (nombre, descripcion, activo)
+VALUES ('Impertexas', 'Linea de impermeabilizantes Impertexas', TRUE)
+ON CONFLICT (nombre) DO NOTHING;
+
+INSERT INTO marcas (nombre, descripcion, activo)
+VALUES ('Manto Colombia', 'Linea de mantos impermeabilizantes Colombia', TRUE)
+ON CONFLICT (nombre) DO NOTHING;
+
+-- 2) Productos nuevos
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'MGRAV-ROJ', 'Manto Gravillado Rojo 3mm', 'Manto impermeabilizante gravillado color rojo, 3mm de grosor, presentacion 1 x 10 m.', 'IMPERMEABILIZANTE', c.id, m.id, 105000.0, 75600, 'rollo', 10.0, 1.0, 3.0, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'MGRAV-VER', 'Manto Gravillado Verde 3mm', 'Manto impermeabilizante gravillado color verde, 3mm de grosor, presentacion 1 x 10 m.', 'IMPERMEABILIZANTE', c.id, m.id, 105000.0, 75600, 'rollo', 10.0, 1.0, 3.0, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'MGRAV-GRI', 'Manto Gravillado Gris 3mm', 'Manto impermeabilizante gravillado color gris, 3mm de grosor, presentacion 1 x 10 m.', 'IMPERMEABILIZANTE', c.id, m.id, 105000.0, 75600, 'rollo', 10.0, 1.0, 3.0, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'El Bodegon del Manto';
+
+INSERT INTO productos (codigo, nombre, descripcion, tipo_producto, categoria_id, marca_id, precio_venta, costo, unidad_medida, largo_m, ancho_m, grosor_mm, activo)
+SELECT 'SIKAFLEX-1A-GRIS', 'Sikaflex 1A Universal Gris', 'Sellante adhesivo de poliuretano de un componente, color gris, para juntas y sellado de techos y superficies. Presentacion en tubo/cartucho.', 'IMPERMEABILIZANTE', c.id, m.id, 42000, 30240, 'tubo', NULL, NULL, NULL, TRUE
+FROM categorias c, marcas m WHERE c.slug = 'impermeabilizantes' AND m.nombre = 'Sika';
+
+INSERT INTO inventario (producto_id, stock_actual, stock_minimo, ubicacion)
+SELECT p.id, 30, 5, 'Bodega principal'
+FROM productos p
+WHERE p.codigo IN ('MGRAV-ROJ','MGRAV-VER','MGRAV-GRI','SIKAFLEX-1A-GRIS');
+
+-- 3) Reasignar marca real a productos existentes
+UPDATE productos SET marca_id = (SELECT id FROM marcas WHERE nombre = 'Fiberglass')
+WHERE codigo LIKE 'EMU-FIB-%';
+UPDATE productos SET marca_id = (SELECT id FROM marcas WHERE nombre = 'Sika')
+WHERE codigo LIKE 'EMU-SIK-%';
+UPDATE productos SET marca_id = (SELECT id FROM marcas WHERE nombre = 'IPA')
+WHERE codigo LIKE 'ALU-IPA-%';
+UPDATE productos SET marca_id = (SELECT id FROM marcas WHERE nombre = 'IPA')
+WHERE codigo LIKE 'CEM-IPA-%';
+UPDATE productos SET marca_id = (SELECT id FROM marcas WHERE nombre = 'Impac')
+WHERE codigo LIKE 'IMPAC7000%';
+UPDATE productos SET marca_id = (SELECT id FROM marcas WHERE nombre = 'Sika')
+WHERE codigo LIKE 'SIKAF7-%';
+UPDATE productos SET marca_id = (SELECT id FROM marcas WHERE nombre = 'Sika')
+WHERE codigo LIKE 'SIKAF100-%';
+UPDATE productos SET marca_id = (SELECT id FROM marcas WHERE nombre = 'Impertexas')
+WHERE codigo LIKE 'IMPTX7-%';
+UPDATE productos SET marca_id = (SELECT id FROM marcas WHERE nombre = 'Metalex')
+WHERE codigo LIKE 'MTX-%';
+UPDATE productos SET marca_id = (SELECT id FROM marcas WHERE nombre = 'Manto Colombia')
+WHERE codigo LIKE 'MCOL-FIB-%';
+UPDATE productos SET marca_id = (SELECT id FROM marcas WHERE nombre = 'IPA')
+WHERE codigo LIKE 'MIPA-%';
+UPDATE productos SET marca_id = (SELECT id FROM marcas WHERE nombre = 'Roofer')
+WHERE codigo LIKE 'MROOF%';
+UPDATE productos SET marca_id = (SELECT id FROM marcas WHERE nombre = 'Edil')
+WHERE codigo LIKE 'MEDIL-%';
+UPDATE productos SET marca_id = (SELECT id FROM marcas WHERE nombre = 'Fiberglass')
+WHERE codigo LIKE 'MFIB-XT500%';
+UPDATE productos SET marca_id = (SELECT id FROM marcas WHERE nombre = 'Texsa')
+WHERE codigo LIKE 'MTEX-%';
+UPDATE productos SET marca_id = (SELECT id FROM marcas WHERE nombre = 'Texsa')
+WHERE codigo LIKE 'CINTA-TXS-%';
+UPDATE productos SET marca_id = (SELECT id FROM marcas WHERE nombre = 'Edil')
+WHERE codigo LIKE 'CINTA-EDIL-%';

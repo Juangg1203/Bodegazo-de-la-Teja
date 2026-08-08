@@ -422,8 +422,10 @@ Bodega) y ajusto la regla antes de construir ese módulo.
 - [ ] DTOs + mapeos
 - [x] Catálogo de productos (listado, filtros, ficha de producto)
 - [x] Calculadora de mantos y calculadora de tejas
-- [ ] Módulo de inventario (entradas, salidas, alertas de stock mínimo)
-- [x] Módulo de ventas y cotizaciones (falta PDF y envío por correo — dependencias comentadas temporalmente)
-- [ ] Dashboard administrativo con gráficos
+- [x] Módulo de inventario (entradas, salidas, alertas de stock mínimo, historial de movimientos)
+- [x] Módulo de ventas y cotizaciones + PDF de cotización (falta envío por correo)
+- [x] Formato de corte de tejas en PDF (desde la calculadora de tejas)
+- [x] CRUD de Usuarios (crear/editar/activar-desactivar, asignar roles) — solo Administrador
+- [x] Dashboard administrativo con gráficos (ventas 7 días, productos por categoría, top vendidos)
 - [ ] SEO (meta tags, sitemap, robots.txt, Open Graph)
 - [ ] Despliegue en Render

@@ -10,7 +10,7 @@
     <div class="container text-center">
       <c:if test="${not empty logoSeccion}">
         <span class="bg-white rounded px-3 py-2 d-inline-flex align-items-center mb-3">
-          <img src="${pageContext.request.contextPath}${logoSeccion}" alt="${subtituloSeccion}" height="56">
+          <img src="${pageContext.request.contextPath}${logoSeccion}" alt="${subtituloSeccion}" width="200" style="height:auto;">
         </span>
       </c:if>
       <h1 class="mb-1"><c:out value="${tituloSeccion}"/></h1>

@@ -17,4 +17,9 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     Page<Producto> findByNombreContainingIgnoreCase(String nombre, Pageable pageable);
     Page<Producto> findByTipoProductoIn(List<String> tipos, Pageable pageable);
     Page<Producto> findByTipoProductoInAndNombreContainingIgnoreCase(List<String> tipos, String nombre, Pageable pageable);
+
+    @org.springframework.data.jpa.repository.Query(
+        "SELECT p.categoria.nombre, COUNT(p) FROM Producto p WHERE p.activo = true GROUP BY p.categoria.nombre"
+    )
+    List<Object[]> contarPorCategoria();
 }

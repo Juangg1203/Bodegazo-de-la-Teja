@@ -5,7 +5,7 @@
   <div class="container">
     <a class="navbar-brand fw-bold d-flex align-items-center" href="${pageContext.request.contextPath}/inicio">
       <span class="bg-white rounded px-2 py-1 d-inline-flex align-items-center">
-        <img src="${pageContext.request.contextPath}/images/logo-bodegazo.png" alt="Bodegazo de la Teja" height="38">
+        <img src="${pageContext.request.contextPath}/images/logo-bodegazo.png" alt="Bodegazo de la Teja" height="46">
       </span>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
@@ -21,7 +21,7 @@
               <div class="col-6">
                 <a class="d-block text-decoration-none p-2 rounded border h-100" href="${pageContext.request.contextPath}/tejas-upvc">
                   <span class="bg-white rounded px-2 py-1 d-inline-flex align-items-center mb-2 border">
-                    <img src="${pageContext.request.contextPath}/images/logo-bodegazo.png" alt="Bodegazo de la Teja" height="28">
+                    <img src="${pageContext.request.contextPath}/images/logo-bodegazo.png" alt="Bodegazo de la Teja" height="36">
                   </span>
                   <div class="small text-dark fw-semibold"><i class="bi bi-grid-3x3-gap-fill me-1 text-accent"></i>Tejas UPVC</div>
                 </a>
@@ -29,7 +29,7 @@
               <div class="col-6">
                 <a class="d-block text-decoration-none p-2 rounded border h-100" href="${pageContext.request.contextPath}/impermeabilizantes">
                   <span class="bg-white rounded px-2 py-1 d-inline-flex align-items-center mb-2 border">
-                    <img src="${pageContext.request.contextPath}/images/logo-bodegon-manto.png" alt="El Bodegón del Manto" height="28">
+                    <img src="${pageContext.request.contextPath}/images/logo-bodegon-manto.png" alt="El Bodegón del Manto" height="36">
                   </span>
                   <div class="small text-dark fw-semibold"><i class="bi bi-droplet-fill me-1 text-accent"></i>Impermeabilizantes</div>
                 </a>
@@ -67,8 +67,20 @@
         </sec:authorize>
         <sec:authorize access="hasAnyRole('ADMINISTRADOR','JEFE_BODEGA')">
           <li class="nav-item">
+            <a class="nav-link" href="${pageContext.request.contextPath}/inventario">
+              <i class="bi bi-box-seam-fill me-1"></i>Inventario
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="${pageContext.request.contextPath}/administracion/productos">
               <i class="bi bi-gear-fill me-1"></i>Administrar Productos
+            </a>
+          </li>
+        </sec:authorize>
+        <sec:authorize access="hasRole('ADMINISTRADOR')">
+          <li class="nav-item">
+            <a class="nav-link" href="${pageContext.request.contextPath}/usuarios">
+              <i class="bi bi-people-fill me-1"></i>Usuarios
             </a>
           </li>
         </sec:authorize>

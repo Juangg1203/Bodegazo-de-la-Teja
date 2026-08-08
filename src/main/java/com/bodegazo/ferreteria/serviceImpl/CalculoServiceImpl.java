@@ -120,17 +120,31 @@ public class CalculoServiceImpl implements CalculoService {
     public CalculoTejaResultDTO calcularTejas(BigDecimal largo, BigDecimal ancho, String tipoTeja) {
         String tipoNormalizado = "TRAPEZOIDAL".equalsIgnoreCase(tipoTeja) ? "TRAPEZOIDAL" : "COLONIAL";
         String prefijo = "TEJA_" + tipoNormalizado + "_";
+        boolean esColonial = "COLONIAL".equals(tipoNormalizado);
+
         // Valores de respaldo por tipo: la teja colonial pierde más largo
-        // en el traslapo longitudinal (22 cm) que la trapezoidal (20 cm).
-        String traslapoLongitudinalPorDefecto = "COLONIAL".equals(tipoNormalizado) ? "22" : "20";
+        // en el traslapo longitudinal (22 cm) que la trapezoidal (20 cm),
+        // y es más angosta (1.05 m vs 1.10 m).
+        String traslapoLongitudinalPorDefecto = esColonial ? "22" : "20";
+        String anchoModuloPorDefecto = esColonial ? "1.05" : "1.10";
 
         BigDecimal largoModulo = obtenerConfig(prefijo + "LARGO_MODULO_M", "5.90");
-        BigDecimal anchoModulo = obtenerConfig(prefijo + "ANCHO_MODULO_M", "1.10");
+        BigDecimal anchoModulo = obtenerConfig(prefijo + "ANCHO_MODULO_M", anchoModuloPorDefecto);
         BigDecimal traslapoLateral = obtenerConfig(prefijo + "TRASLAPO_LATERAL_CM", "10")
                 .divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP); // cm -> m
         BigDecimal traslapoLongitudinal = obtenerConfig(prefijo + "TRASLAPO_LONGITUDINAL_CM", traslapoLongitudinalPorDefecto)
                 .divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP); // cm -> m
         BigDecimal precioReferencia = obtenerConfig(prefijo + "PRECIO_REFERENCIA", "99000");
+
+        // La teja Colonial tiene un patrón de "barrigas" (ondas) que se
+        // repite cada cierta distancia fija — cualquier corte longitudinal
+        // debe caer exactamente en un borde de barriga, si no la onda no
+        // encaja al traslaparse con la siguiente pieza. La Trapezoidal no
+        // tiene esta restricción: se puede cortar donde haga falta.
+        BigDecimal anchoBarriga = esColonial
+                ? obtenerConfig("TEJA_COLONIAL_ANCHO_BARRIGA_CM", "22")
+                        .divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP)
+                : null;
 
         int hileras = calcularModulosEnDimension(ancho, anchoModulo, traslapoLateral);
         int tejasPorHilera = calcularModulosEnDimension(largo, largoModulo, traslapoLongitudinal);
@@ -152,13 +166,26 @@ public class CalculoServiceImpl implements CalculoService {
         //
         // Cada pieza cortada también se traslapa con la teja anterior para
         // fijarse — así que su largo real no es solo lo que falta cubrir,
-        // sino lo que falta + el traslapo longitudinal de esa unión.
+        // sino lo que falta + el traslapo longitudinal de esa unión. Para
+        // la Colonial, ese largo además se redondea hacia arriba al
+        // siguiente borde de barriga (no se puede cortar a mitad de onda).
         Integer cantidadTejasOptimizado = null;
         Integer tejasAhorradas = null;
         String explicacionOptimizacion = null;
+        BigDecimal largoPiezaCorte = null;
         if (tejasPorHilera > 1 && hileras > 1
                 && metrosAdicionales != null && metrosAdicionales.compareTo(BigDecimal.ZERO) > 0) {
             BigDecimal largoPiezaReal = metrosAdicionales.add(traslapoLongitudinal);
+            String notaBarriga = "";
+            if (esColonial) {
+                BigDecimal ondasNecesarias = largoPiezaReal.divide(anchoBarriga, 0, RoundingMode.CEILING);
+                BigDecimal largoPiezaAjustado = ondasNecesarias.multiply(anchoBarriga);
+                notaBarriga = " (redondeado a " + ondasNecesarias + " barriga(s) de " + anchoBarriga
+                        + " m cada una, porque la teja Colonial solo se puede cortar exactamente en el borde de una barriga)";
+                largoPiezaReal = largoPiezaAjustado;
+            }
+            largoPiezaCorte = largoPiezaReal;
+
             int piezasPorTeja = largoModulo.divide(largoPiezaReal, 0, RoundingMode.FLOOR)
                     .max(BigDecimal.ONE).intValue();
             int tejasExtraOptimizado = (int) Math.ceil(hileras / (double) piezasPorTeja);
@@ -168,8 +195,7 @@ public class CalculoServiceImpl implements CalculoService {
                 cantidadTejasOptimizado = cantidadOptimizadaCalc;
                 tejasAhorradas = ahorro;
                 explicacionOptimizacion = "Cada teja de " + largoModulo + " m rinde " + piezasPorTeja
-                        + " pieza(s) de " + largoPiezaReal + " m (los " + metrosAdicionales
-                        + " m que faltan, más " + traslapoLongitudinal + " m para pegarla a la teja anterior). "
+                        + " pieza(s) de " + largoPiezaReal + " m" + notaBarriga + ". "
                         + "Con eso alcanza para el remate de " + piezasPorTeja + " hileras. "
                         + "En vez de " + hileras + " tejas completas solo para los remates, necesitas " + tejasExtraOptimizado
                         + " — ahorras " + ahorro + " teja(s).";
@@ -178,6 +204,8 @@ public class CalculoServiceImpl implements CalculoService {
 
         return CalculoTejaResultDTO.builder()
                 .tipoTeja(tipoNormalizado)
+                .largoModuloM(largoModulo)
+                .anchoModuloM(anchoModulo)
                 .largo(largo)
                 .ancho(ancho)
                 .areaUtil(redondear(areaUtil))
@@ -189,6 +217,7 @@ public class CalculoServiceImpl implements CalculoService {
                 .areaCubierta(redondear(areaCubierta))
                 .sobranteAnchoM(sobranteAnchoM)
                 .metrosAdicionalesUltimoTramoM(metrosAdicionales)
+                .largoPiezaCorteM(largoPiezaCorte)
                 .cantidadTejasOptimizado(cantidadTejasOptimizado)
                 .tejasAhorradasOptimizando(tejasAhorradas)
                 .explicacionOptimizacion(explicacionOptimizacion)

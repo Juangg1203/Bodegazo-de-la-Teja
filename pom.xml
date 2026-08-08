@@ -102,18 +102,39 @@
             <version>3.2.1</version>
         </dependency>
 
-        <!-- TEMPORAL: comentadas hasta que se construyan cotizaciones en PDF,
-             códigos QR y envío de correos — mientras tanto, cada dependencia
-             de más obliga a Spring a escanear más clases al arrancar, lo que
-             se nota en el plan gratuito de Render (CPU muy limitado).
-             Descomentar cuando se implementen esas funciones.
-
+        <!-- Generación de PDF (cotizaciones, formato de corte de tejas).
+             Se declaran también los módulos individuales (kernel, io,
+             layout) además del agregador "itext7-core" — en algunos
+             proyectos Eclipse/m2e no resuelve bien las dependencias
+             transitivas de un artefacto tipo "pom" y da
+             ClassNotFoundException en tiempo de ejecución aunque compile
+             sin errores. Declararlos explícitos evita ese problema. -->
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itext7-core</artifactId>
             <version>8.0.5</version>
             <type>pom</type>
         </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>kernel</artifactId>
+            <version>8.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>io</artifactId>
+            <version>8.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>layout</artifactId>
+            <version>8.0.5</version>
+        </dependency>
+
+        <!-- TEMPORAL: comentadas hasta que se construyan codigos QR y envio de
+             correos — cada dependencia de mas obliga a Spring a escanear mas
+             clases al arrancar (se nota en el plan gratuito de Render).
+             Descomentar cuando se implementen esas funciones.
 
         <dependency>
             <groupId>com.google.zxing</groupId>

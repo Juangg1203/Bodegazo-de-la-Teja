@@ -7,6 +7,8 @@ import java.math.BigDecimal;
  */
 public class CalculoTejaResultDTO {
     private String tipoTeja;             // "COLONIAL" o "TRAPEZOIDAL"
+    private BigDecimal largoModuloM;     // largo físico de una sola teja
+    private BigDecimal anchoModuloM;     // ancho físico de una sola teja
     private BigDecimal largo;
     private BigDecimal ancho;
     private BigDecimal areaUtil;
@@ -18,6 +20,7 @@ public class CalculoTejaResultDTO {
     private BigDecimal areaCubierta;
     private BigDecimal sobranteAnchoM;   // metros de ancho comprados de más
     private BigDecimal metrosAdicionalesUltimoTramoM; // metros extra realmente necesarios de la última teja (no la teja completa)
+    private BigDecimal largoPiezaCorteM; // largo real de cada pieza cortada de una teja donante (ya con el ajuste de barrigas para Colonial)
     private String recomendacionLargo;   // sugerencia de ajuste de correas, si aplica
     private Integer cantidadTejasOptimizado;    // Sección 2: aprovechando sobrantes entre hileras (null si no aplica)
     private Integer tejasAhorradasOptimizando;  // cuántas tejas se ahorran con la optimización
@@ -27,6 +30,12 @@ public class CalculoTejaResultDTO {
 
     public String getTipoTeja() { return tipoTeja; }
     public void setTipoTeja(String tipoTeja) { this.tipoTeja = tipoTeja; }
+
+    public BigDecimal getLargoModuloM() { return largoModuloM; }
+    public void setLargoModuloM(BigDecimal largoModuloM) { this.largoModuloM = largoModuloM; }
+
+    public BigDecimal getAnchoModuloM() { return anchoModuloM; }
+    public void setAnchoModuloM(BigDecimal anchoModuloM) { this.anchoModuloM = anchoModuloM; }
 
     public BigDecimal getLargo() { return largo; }
     public void setLargo(BigDecimal largo) { this.largo = largo; }
@@ -61,6 +70,9 @@ public class CalculoTejaResultDTO {
     public BigDecimal getMetrosAdicionalesUltimoTramoM() { return metrosAdicionalesUltimoTramoM; }
     public void setMetrosAdicionalesUltimoTramoM(BigDecimal metrosAdicionalesUltimoTramoM) { this.metrosAdicionalesUltimoTramoM = metrosAdicionalesUltimoTramoM; }
 
+    public BigDecimal getLargoPiezaCorteM() { return largoPiezaCorteM; }
+    public void setLargoPiezaCorteM(BigDecimal largoPiezaCorteM) { this.largoPiezaCorteM = largoPiezaCorteM; }
+
     public String getRecomendacionLargo() { return recomendacionLargo; }
     public void setRecomendacionLargo(String recomendacionLargo) { this.recomendacionLargo = recomendacionLargo; }
 
@@ -84,6 +96,8 @@ public class CalculoTejaResultDTO {
     public static class Builder {
         private final CalculoTejaResultDTO dto = new CalculoTejaResultDTO();
         public Builder tipoTeja(String v) { dto.tipoTeja = v; return this; }
+        public Builder largoModuloM(BigDecimal v) { dto.largoModuloM = v; return this; }
+        public Builder anchoModuloM(BigDecimal v) { dto.anchoModuloM = v; return this; }
         public Builder largo(BigDecimal v) { dto.largo = v; return this; }
         public Builder ancho(BigDecimal v) { dto.ancho = v; return this; }
         public Builder areaUtil(BigDecimal v) { dto.areaUtil = v; return this; }
@@ -95,6 +109,7 @@ public class CalculoTejaResultDTO {
         public Builder areaCubierta(BigDecimal v) { dto.areaCubierta = v; return this; }
         public Builder sobranteAnchoM(BigDecimal v) { dto.sobranteAnchoM = v; return this; }
         public Builder metrosAdicionalesUltimoTramoM(BigDecimal v) { dto.metrosAdicionalesUltimoTramoM = v; return this; }
+        public Builder largoPiezaCorteM(BigDecimal v) { dto.largoPiezaCorteM = v; return this; }
         public Builder recomendacionLargo(String v) { dto.recomendacionLargo = v; return this; }
         public Builder cantidadTejasOptimizado(Integer v) { dto.cantidadTejasOptimizado = v; return this; }
         public Builder tejasAhorradasOptimizando(Integer v) { dto.tejasAhorradasOptimizando = v; return this; }

@@ -21,11 +21,11 @@
   <!-- Categorías destacadas -->
   <section class="py-5">
     <div class="container">
-      <h2 class="text-center fw-bold mb-5">Nuestras marcas y líneas de producto</h2>
+      <h2 class="text-center fw-bold mb-5">Nuestras empresas y sus líneas de producto</h2>
       <div class="row g-4">
         <div class="col-md-6">
           <div class="card card-bodegazo h-100 p-4">
-            <img src="${pageContext.request.contextPath}/images/logo-bodegon-manto.png" alt="El Bodegón del Manto" height="48" class="mb-3" style="width:auto;">
+            <img src="${pageContext.request.contextPath}/images/logo-bodegon-manto.png" alt="El Bodegón del Manto" width="220" class="mb-3" style="height:auto;">
             <h4 class="fw-bold">Impermeabilizantes</h4>
             <p class="text-muted">Mantos con y sin foil de aluminio, autoadhesivos o no, en distintos grosores — traslapo garantizado para máxima duración.</p>
             <a href="${pageContext.request.contextPath}/impermeabilizantes" class="btn btn-outline-accent mt-auto align-self-start">Ver catálogo</a>
@@ -33,7 +33,7 @@
         </div>
         <div class="col-md-6">
           <div class="card card-bodegazo h-100 p-4">
-            <img src="${pageContext.request.contextPath}/images/logo-bodegazo.png" alt="Bodegazo de la Teja" height="48" class="mb-3" style="width:auto;">
+            <img src="${pageContext.request.contextPath}/images/logo-bodegazo.png" alt="Bodegazo de la Teja" width="220" class="mb-3" style="height:auto;">
             <h4 class="fw-bold">Tejas UPVC</h4>
             <p class="text-muted">Tejas plásticas resistentes, livianas y de larga duración, en presentación colonial y trapezoidal.</p>
             <a href="${pageContext.request.contextPath}/tejas-upvc" class="btn btn-outline-accent mt-auto align-self-start">Ver catálogo</a>

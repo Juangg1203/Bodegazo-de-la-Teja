@@ -64,6 +64,82 @@
           </a>
         </div>
       </div>
+
+      <h5 class="fw-bold mb-3 mt-5"><i class="bi bi-bar-chart-line-fill text-accent me-2"></i>Gráficos</h5>
+      <div class="row g-3 mb-4">
+        <div class="col-lg-6">
+          <div class="card card-bodegazo p-3">
+            <h6 class="fw-bold mb-3">Ventas de los últimos 7 días</h6>
+            <canvas id="graficoVentas" height="220"></canvas>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card card-bodegazo p-3">
+            <h6 class="fw-bold mb-3">Productos activos por categoría</h6>
+            <canvas id="graficoCategorias" height="220"></canvas>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="card card-bodegazo p-3">
+            <h6 class="fw-bold mb-3">Top 5 productos más vendidos</h6>
+            <canvas id="graficoTop" height="140"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          const colorAccent = '#9a2b1f';
+          const colorAzul = '#1c1c1c';
+          const paletaCategorias = ['#9a2b1f', '#1c1c1c', '#c9773f', '#5a5a5a', '#e0a377'];
+
+          // Ventas últimos 7 días (línea)
+          new Chart(document.getElementById('graficoVentas'), {
+            type: 'line',
+            data: {
+              labels: [<c:forEach var="e" items="${etiquetasVentas}" varStatus="s">'<c:out value="${e}"/>'<c:if test="${!s.last}">,</c:if></c:forEach>],
+              datasets: [{
+                label: 'Ventas ($)',
+                data: [<c:forEach var="v" items="${valoresVentas}" varStatus="s">${v}<c:if test="${!s.last}">,</c:if></c:forEach>],
+                borderColor: colorAccent,
+                backgroundColor: 'rgba(154,43,31,0.12)',
+                tension: 0.35,
+                fill: true,
+                pointBackgroundColor: colorAccent
+              }]
+            },
+            options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+          });
+
+          // Productos por categoría (dona)
+          new Chart(document.getElementById('graficoCategorias'), {
+            type: 'doughnut',
+            data: {
+              labels: [<c:forEach var="e" items="${etiquetasCategorias}" varStatus="s">'<c:out value="${e}"/>'<c:if test="${!s.last}">,</c:if></c:forEach>],
+              datasets: [{
+                data: [<c:forEach var="v" items="${valoresCategorias}" varStatus="s">${v}<c:if test="${!s.last}">,</c:if></c:forEach>],
+                backgroundColor: paletaCategorias
+              }]
+            },
+            options: { plugins: { legend: { position: 'bottom' } } }
+          });
+
+          // Top productos más vendidos (barras horizontales)
+          new Chart(document.getElementById('graficoTop'), {
+            type: 'bar',
+            data: {
+              labels: [<c:forEach var="e" items="${etiquetasTop}" varStatus="s">'<c:out value="${e}"/>'<c:if test="${!s.last}">,</c:if></c:forEach>],
+              datasets: [{
+                label: 'Unidades vendidas',
+                data: [<c:forEach var="v" items="${valoresTop}" varStatus="s">${v}<c:if test="${!s.last}">,</c:if></c:forEach>],
+                backgroundColor: colorAzul
+              }]
+            },
+            options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true } } }
+          });
+        });
+      </script>
     </c:if>
 
     <!-- ================= JEFE DE BODEGA: alerta de inventario ================= -->
