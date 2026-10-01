@@ -72,7 +72,6 @@ public class CotizacionServiceImpl implements CotizacionService {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado con id: " + usuarioId));
 
-        BigDecimal ivaPorcentaje = obtenerConfig("IVA_PORCENTAJE", "19");
         int vigenciaDias = obtenerConfig("COTIZACION_VIGENCIA_DIAS", "15").intValue();
 
         Cotizacion cotizacion = new Cotizacion();
@@ -97,10 +96,11 @@ public class CotizacionServiceImpl implements CotizacionService {
             subtotal = subtotal.add(item.getSubtotal());
         }
 
-        BigDecimal impuesto = subtotal.multiply(ivaPorcentaje).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+        // El IVA ya viene incluido dentro del precio de cada producto —
+        // no se suma aparte, para no cobrarlo dos veces.
         cotizacion.setSubtotal(subtotal.setScale(2, RoundingMode.HALF_UP));
-        cotizacion.setImpuesto(impuesto);
-        cotizacion.setTotal(subtotal.add(impuesto).setScale(2, RoundingMode.HALF_UP));
+        cotizacion.setImpuesto(BigDecimal.ZERO);
+        cotizacion.setTotal(subtotal.setScale(2, RoundingMode.HALF_UP));
 
         return cotizacionRepository.save(cotizacion).getId();
     }
@@ -143,7 +143,7 @@ public class CotizacionServiceImpl implements CotizacionService {
 
     @Override
     @Transactional
-    public Long aceptar(Long id, Long usuarioId) {
+    public Long aceptar(Long id, Long usuarioId, String metodoPago) {
         Cotizacion cotizacion = cotizacionRepository.findById(id)
                 .orElseThrow(() -> new RecursoNoEncontradoException("Cotización no encontrada con id: " + id));
         Usuario usuario = usuarioRepository.findById(usuarioId)
@@ -156,6 +156,7 @@ public class CotizacionServiceImpl implements CotizacionService {
         venta.setImpuesto(cotizacion.getImpuesto());
         venta.setTotal(cotizacion.getTotal());
         venta.setEstado(Venta.COMPLETADA);
+        venta.setMetodoPago((metodoPago != null && !metodoPago.isBlank()) ? metodoPago : Venta.PAGO_EFECTIVO);
 
         for (DetalleCotizacion dc : cotizacion.getDetalles()) {
             DetalleVenta dv = new DetalleVenta();

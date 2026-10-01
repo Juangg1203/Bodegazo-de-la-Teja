@@ -2,6 +2,7 @@ package com.bodegazo.ferreteria.controller;
 
 import com.bodegazo.ferreteria.dto.CalculoMantoResultDTO;
 import com.bodegazo.ferreteria.dto.CalculoTejaResultDTO;
+import com.bodegazo.ferreteria.repository.ProductoRepository;
 import com.bodegazo.ferreteria.service.CalculoService;
 import com.bodegazo.ferreteria.utils.PdfGeneratorUtil;
 import org.springframework.http.HttpHeaders;
@@ -26,10 +27,13 @@ public class CalculadoraController {
 
     private final CalculoService calculoService;
     private final PdfGeneratorUtil pdfGeneratorUtil;
+    private final ProductoRepository productoRepository;
 
-    public CalculadoraController(CalculoService calculoService, PdfGeneratorUtil pdfGeneratorUtil) {
+    public CalculadoraController(CalculoService calculoService, PdfGeneratorUtil pdfGeneratorUtil,
+                                  ProductoRepository productoRepository) {
         this.calculoService = calculoService;
         this.pdfGeneratorUtil = pdfGeneratorUtil;
+        this.productoRepository = productoRepository;
     }
 
     @GetMapping("/calculadora-mantos")
@@ -83,6 +87,22 @@ public class CalculadoraController {
 
         CalculoTejaResultDTO resultado = calculoService.calcularTejas(largo, ancho, tipoTeja);
         model.addAttribute("resultado", resultado);
+
+        // Productos reales que coinciden con el tipo y largo de teja calculados,
+        // para poder agregar el resultado directamente a una cotización.
+        String palabraTipo = "TRAPEZOIDAL".equalsIgnoreCase(tipoTeja) ? "Trapezoidal" : "Colonial";
+        var productosCoincidentes = productoRepository
+                .findByTipoProductoAndLargoMAndActivoTrueOrderByNombre("TEJA_UPVC", resultado.getLargoModuloM())
+                .stream()
+                .filter(p -> p.getNombre().toLowerCase().contains(palabraTipo.toLowerCase()))
+                .toList();
+        model.addAttribute("productosCoincidentes", productosCoincidentes);
+
+        Integer cantidadFinal = resultado.getCantidadTejasOptimizado() != null
+                ? resultado.getCantidadTejasOptimizado()
+                : resultado.getCantidadTejas();
+        model.addAttribute("cantidadFinalTejas", cantidadFinal);
+
         return "pages/calculadora-tejas";
     }
 

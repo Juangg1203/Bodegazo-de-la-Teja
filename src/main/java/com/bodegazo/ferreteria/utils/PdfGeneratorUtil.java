@@ -3,6 +3,7 @@ package com.bodegazo.ferreteria.utils;
 import com.bodegazo.ferreteria.dto.CalculoTejaResultDTO;
 import com.bodegazo.ferreteria.dto.CotizacionDetalleDTO;
 import com.bodegazo.ferreteria.dto.ItemDetalleDTO;
+import com.bodegazo.ferreteria.dto.PlanCortesResultDTO;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.colors.DeviceRgb;
@@ -65,11 +66,13 @@ public class PdfGeneratorUtil {
             Table tabla = new Table(UnitValue.createPercentArray(new float[]{4, 1, 1.3f, 1.3f}))
                     .useAllAvailableWidth().setMarginTop(10);
             agregarEncabezadoTabla(tabla, "Producto", "Cant.", "Precio unit.", "Subtotal");
+            int filaCot = 0;
             for (ItemDetalleDTO item : cotizacion.getItems()) {
-                tabla.addCell(celdaCuerpo(item.getNombreProducto() + " (" + item.getCodigoProducto() + ")", TextAlignment.LEFT));
-                tabla.addCell(celdaCuerpo(item.getCantidad().toString(), TextAlignment.CENTER));
-                tabla.addCell(celdaCuerpo(MONEDA.format(item.getPrecioUnitario()), TextAlignment.RIGHT));
-                tabla.addCell(celdaCuerpo(MONEDA.format(item.getSubtotal()), TextAlignment.RIGHT));
+                boolean par = filaCot++ % 2 == 0;
+                tabla.addCell(celdaCuerpoFila(item.getNombreProducto() + " (" + item.getCodigoProducto() + ")", TextAlignment.LEFT, par));
+                tabla.addCell(celdaCuerpoFila(item.getCantidad().toString(), TextAlignment.CENTER, par));
+                tabla.addCell(celdaCuerpoFila(MONEDA.format(item.getPrecioUnitario()), TextAlignment.RIGHT, par));
+                tabla.addCell(celdaCuerpoFila(MONEDA.format(item.getSubtotal()), TextAlignment.RIGHT, par));
             }
             doc.add(tabla);
 
@@ -349,30 +352,111 @@ public class PdfGeneratorUtil {
                 .setFontSize(8).setFontColor(ColorConstants.GRAY).setMarginBottom(10));
     }
 
+    // ==================== PLAN DE CORTES (bodega y cliente) ====================
+
+    /** Versión completa, con el detalle de cada corte por lámina — para el bodeguero. */
+    public byte[] generarPlanCortesBodeguero(PlanCortesResultDTO plan) {
+        try (ByteArrayOutputStream salida = new ByteArrayOutputStream()) {
+            PdfDocument pdfDoc = new PdfDocument(new PdfWriter(salida));
+            Document doc = new Document(pdfDoc, PageSize.A4);
+            doc.setMargins(30, 36, 30, 36);
+
+            agregarEncabezado(doc, "PLAN DE OPTIMIZACIÓN DE CORTES");
+
+            doc.add(new Paragraph("Plan de Cortes — " + plan.getLaminasUsadas() + " lámina(s) — base: " + plan.getLaminaBaseM() + " m")
+                    .setBold().setFontSize(13).setMarginTop(6).setMarginBottom(10));
+
+            Table resumen = new Table(UnitValue.createPercentArray(new float[]{1, 1, 1, 1}))
+                    .useAllAvailableWidth().setMarginBottom(14);
+            resumen.addCell(tarjetaResumen("Láminas usadas", String.valueOf(plan.getLaminasUsadas())));
+            resumen.addCell(tarjetaResumen("Material disponible", plan.getMaterialDisponibleM() + " m"));
+            resumen.addCell(tarjetaResumen("Material usado", plan.getMaterialUsadoM() + " m"));
+            resumen.addCell(tarjetaResumen("Desperdicio total", plan.getDesperdicioTotalM() + " m"));
+            doc.add(resumen);
+
+            Table tabla = new Table(UnitValue.createPercentArray(new float[]{0.6f, 3.2f, 1, 1}))
+                    .useAllAvailableWidth().setMarginBottom(10);
+            agregarEncabezadoTabla(tabla, "Lámina", "Cortes (m)", "Total usado", "Sobrante");
+            int filaLamina = 0;
+            for (PlanCortesResultDTO.LaminaCorteDTO lamina : plan.getLaminas()) {
+                boolean par = filaLamina++ % 2 == 0;
+                String cortesTexto = lamina.getCortes().stream().map(String::valueOf).reduce((a, b) -> a + " + " + b).orElse("");
+                tabla.addCell(celdaCuerpoFila(String.valueOf(lamina.getNumero()), TextAlignment.CENTER, par));
+                tabla.addCell(celdaCuerpoFila(cortesTexto, TextAlignment.LEFT, par));
+                tabla.addCell(celdaCuerpoFila(lamina.getTotalUsado() + " m", TextAlignment.RIGHT, par));
+                boolean sinSobrante = lamina.getSobrante().compareTo(BigDecimal.ZERO) == 0;
+                Cell celdaSobrante = celdaCuerpoFila(lamina.getSobrante() + " m", TextAlignment.RIGHT, par);
+                if (sinSobrante) {
+                    celdaSobrante.setFontColor(new DeviceRgb(30, 130, 76));
+                }
+                tabla.addCell(celdaSobrante);
+            }
+            doc.add(tabla);
+
+            if (plan.getPendientes() != null && !plan.getPendientes().isEmpty()) {
+                Table pendienteBox = new Table(1).useAllAvailableWidth().setMarginBottom(10);
+                Cell celda = new Cell()
+                        .setBackgroundColor(new DeviceRgb(255, 243, 224))
+                        .setBorder(new com.itextpdf.layout.borders.SolidBorder(new DeviceRgb(230, 160, 40), 0.75f))
+                        .setPadding(10);
+                celda.add(new Paragraph("Pendiente por conseguir aparte").setBold().setFontSize(11).setFontColor(new DeviceRgb(150, 100, 10)));
+                for (PlanCortesResultDTO.PiezaPendienteDTO p : plan.getPendientes()) {
+                    celda.add(new Paragraph("• " + p.getCantidad() + " pieza(s) de " + p.getLargo() + " m — " + p.getMotivo()).setFontSize(9));
+                }
+                pendienteBox.addCell(celda);
+                doc.add(pendienteBox);
+            }
+
+            doc.add(new Paragraph("Verificación de cantidades cortadas").setBold().setFontSize(11).setMarginTop(6).setMarginBottom(6));
+            Table verificacion = new Table(UnitValue.createPercentArray(repetir(Math.min(plan.getResumenCantidades().size(), 6), 1f)))
+                    .useAllAvailableWidth();
+            for (PlanCortesResultDTO.PiezaResumenDTO r : plan.getResumenCantidades()) {
+                Cell celda = new Cell()
+                        .add(new Paragraph(r.getLargo() + " x " + r.getCantidad()).setFontSize(9).setBold().setTextAlignment(TextAlignment.CENTER))
+                        .setBackgroundColor(COLOR_GRIS_CLARO)
+                        .setBorder(com.itextpdf.layout.borders.Border.NO_BORDER)
+                        .setPadding(6);
+                verificacion.addCell(celda);
+            }
+            doc.add(verificacion);
+
+            agregarPie(doc, "Este plan busca aprovechar al máximo cada lámina. Verifica las medidas en obra antes de cortar.");
+            doc.close();
+            return salida.toByteArray();
+        } catch (IOException e) {
+            throw new RuntimeException("No se pudo generar el PDF del plan de cortes", e);
+        }
+    }
+
     // ==================== helpers compartidos ====================
 
     private void agregarEncabezado(Document doc, String titulo) throws IOException {
-        Table encabezado = new Table(UnitValue.createPercentArray(new float[]{1, 2}))
-                .useAllAvailableWidth();
+        // Banda superior de color, a todo el ancho, detrás del logo y el título
+        Table banda = new Table(UnitValue.createPercentArray(new float[]{1, 2}))
+                .useAllAvailableWidth()
+                .setBackgroundColor(COLOR_AZUL)
+                .setMarginBottom(0);
 
-        Cell celdaLogo = new Cell().setBorder(com.itextpdf.layout.borders.Border.NO_BORDER);
+        Cell celdaLogo = new Cell().setBorder(com.itextpdf.layout.borders.Border.NO_BORDER)
+                .setPadding(14).setVerticalAlignment(com.itextpdf.layout.properties.VerticalAlignment.MIDDLE);
         try (InputStream logoStream = new ClassPathResource("static/images-pdf/logo-bodegazo.png").getInputStream()) {
             byte[] logoBytes = logoStream.readAllBytes();
-            Image logo = new Image(ImageDataFactory.create(logoBytes)).setWidth(90);
+            Image logo = new Image(ImageDataFactory.create(logoBytes)).setWidth(75);
             celdaLogo.add(logo);
         } catch (Exception e) {
-            celdaLogo.add(new Paragraph("BODEGAZO DE LA TEJA").setBold().setFontSize(14));
+            celdaLogo.add(new Paragraph("BODEGAZO DE LA TEJA").setBold().setFontSize(13).setFontColor(ColorConstants.WHITE));
         }
-        encabezado.addCell(celdaLogo);
+        banda.addCell(celdaLogo);
 
         Cell celdaTitulo = new Cell().setBorder(com.itextpdf.layout.borders.Border.NO_BORDER)
-                .setVerticalAlignment(com.itextpdf.layout.properties.VerticalAlignment.MIDDLE);
-        celdaTitulo.add(new Paragraph(titulo).setBold().setFontSize(16).setFontColor(COLOR_AZUL).setTextAlignment(TextAlignment.RIGHT));
-        encabezado.addCell(celdaTitulo);
+                .setPadding(14).setVerticalAlignment(com.itextpdf.layout.properties.VerticalAlignment.MIDDLE);
+        celdaTitulo.add(new Paragraph(titulo).setBold().setFontSize(17).setFontColor(ColorConstants.WHITE).setTextAlignment(TextAlignment.RIGHT).setMarginBottom(2));
+        celdaTitulo.add(new Paragraph("Bodegazo de la Teja / El Bodegón del Manto").setFontSize(8).setFontColor(new DeviceRgb(200, 200, 200)).setTextAlignment(TextAlignment.RIGHT));
+        banda.addCell(celdaTitulo);
 
-        doc.add(encabezado);
-        doc.add(new com.itextpdf.layout.element.LineSeparator(new com.itextpdf.kernel.pdf.canvas.draw.SolidLine(1f))
-                .setStrokeColor(COLOR_NARANJA).setMarginTop(6).setMarginBottom(6));
+        doc.add(banda);
+        doc.add(new com.itextpdf.layout.element.LineSeparator(new com.itextpdf.kernel.pdf.canvas.draw.SolidLine(3f))
+                .setStrokeColor(COLOR_NARANJA).setMarginBottom(14));
     }
 
     private void agregarEncabezadoTabla(Table tabla, String... columnas) {
@@ -389,6 +473,17 @@ public class PdfGeneratorUtil {
         return new Cell().add(new Paragraph(texto).setFontSize(10)).setTextAlignment(alineacion).setPadding(6);
     }
 
+    /** Igual que celdaCuerpo, pero con franja de fondo alternada (fila par/impar) para tablas largas. */
+    private Cell celdaCuerpoFila(String texto, TextAlignment alineacion, boolean filaPar) {
+        Cell celda = new Cell().add(new Paragraph(texto).setFontSize(10)).setTextAlignment(alineacion).setPadding(7)
+                .setBorder(com.itextpdf.layout.borders.Border.NO_BORDER)
+                .setBorderBottom(new com.itextpdf.layout.borders.SolidBorder(new DeviceRgb(230, 230, 230), 0.5f));
+        if (filaPar) {
+            celda.setBackgroundColor(COLOR_GRIS_CLARO);
+        }
+        return celda;
+    }
+
     private Cell celdaSinBorde(String texto, boolean negrita) {
         Paragraph p = new Paragraph(texto).setFontSize(10);
         if (negrita) {
@@ -401,10 +496,11 @@ public class PdfGeneratorUtil {
         Cell celda = new Cell()
                 .setBackgroundColor(COLOR_GRIS_CLARO)
                 .setBorder(com.itextpdf.layout.borders.Border.NO_BORDER)
-                .setPadding(10)
+                .setBorderTop(new com.itextpdf.layout.borders.SolidBorder(COLOR_NARANJA, 2f))
+                .setPadding(12)
                 .setTextAlignment(TextAlignment.CENTER);
-        celda.add(new Paragraph(etiqueta).setFontSize(9).setFontColor(ColorConstants.GRAY));
-        celda.add(new Paragraph(valor).setBold().setFontSize(13).setFontColor(COLOR_NARANJA));
+        celda.add(new Paragraph(etiqueta.toUpperCase()).setFontSize(8).setFontColor(ColorConstants.GRAY).setMarginBottom(2));
+        celda.add(new Paragraph(valor).setBold().setFontSize(15).setFontColor(COLOR_AZUL));
         return celda;
     }
 
@@ -412,13 +508,10 @@ public class PdfGeneratorUtil {
         Table totales = new Table(UnitValue.createPercentArray(new float[]{3, 1}))
                 .useAllAvailableWidth().setMarginTop(10).setHorizontalAlignment(HorizontalAlignment.RIGHT);
 
-        totales.addCell(celdaSinBorde("Subtotal", false).setTextAlignment(TextAlignment.RIGHT));
-        totales.addCell(celdaSinBorde(MONEDA.format(subtotal), false).setTextAlignment(TextAlignment.RIGHT));
-        totales.addCell(celdaSinBorde("IVA", false).setTextAlignment(TextAlignment.RIGHT));
-        totales.addCell(celdaSinBorde(MONEDA.format(impuesto), false).setTextAlignment(TextAlignment.RIGHT));
         totales.addCell(celdaSinBorde("TOTAL", true).setTextAlignment(TextAlignment.RIGHT).setFontColor(COLOR_NARANJA));
         totales.addCell(celdaSinBorde(MONEDA.format(total), true).setTextAlignment(TextAlignment.RIGHT).setFontColor(COLOR_NARANJA));
         doc.add(totales);
+        doc.add(new Paragraph("IVA incluido").setFontSize(8).setFontColor(ColorConstants.GRAY).setTextAlignment(TextAlignment.RIGHT));
     }
 
     private void agregarPie(Document doc, String texto) {

@@ -4,8 +4,10 @@ import com.bodegazo.ferreteria.entity.Inventario;
 import com.bodegazo.ferreteria.entity.Venta;
 import com.bodegazo.ferreteria.repository.CategoriaRepository;
 import com.bodegazo.ferreteria.repository.ClienteRepository;
+import com.bodegazo.ferreteria.repository.CotizacionRepository;
 import com.bodegazo.ferreteria.repository.DetalleVentaRepository;
 import com.bodegazo.ferreteria.repository.InventarioRepository;
+import com.bodegazo.ferreteria.repository.MovimientoInventarioRepository;
 import com.bodegazo.ferreteria.repository.ProductoRepository;
 import com.bodegazo.ferreteria.repository.UsuarioRepository;
 import com.bodegazo.ferreteria.repository.VentaRepository;
@@ -31,16 +33,11 @@ import java.util.stream.Collectors;
 
 /**
  * Punto de entrada tras el login (defaultSuccessUrl en SecurityConfig).
- * El contenido que se muestra depende del rol del usuario autenticado,
- * dividiendo el trabajo de cada quien:
- *  - ADMINISTRADOR: reportes generales del sistema (conteos, stock bajo,
- *    gráficos de ventas de los últimos 7 días, productos por categoría
- *    y los más vendidos).
- *  - JEFE_BODEGA: alerta de inventario con stock bajo, accesos a
- *    calculadoras e inventario.
- *  - EMPLEADO: accesos rápidos a calculadoras y catálogo, para atender
- *    clientes.
- *  - CLIENTE: bienvenida simple con accesos al catálogo y contacto.
+ * El contenido que se muestra depende del rol del usuario autenticado:
+ *  - ADMINISTRADOR: reportes generales del sistema con gráficos.
+ *  - JEFE_BODEGA: alerta de stock bajo + últimos movimientos de inventario.
+ *  - EMPLEADO: sus ventas registradas hoy + cotizaciones pendientes por atender.
+ *  - CLIENTE: sus cotizaciones y compras recientes.
  */
 @Controller
 public class DashboardController {
@@ -52,6 +49,8 @@ public class DashboardController {
     private final InventarioRepository inventarioRepository;
     private final VentaRepository ventaRepository;
     private final DetalleVentaRepository detalleVentaRepository;
+    private final CotizacionRepository cotizacionRepository;
+    private final MovimientoInventarioRepository movimientoInventarioRepository;
 
     public DashboardController(ProductoRepository productoRepository,
                                 UsuarioRepository usuarioRepository,
@@ -59,7 +58,9 @@ public class DashboardController {
                                 ClienteRepository clienteRepository,
                                 InventarioRepository inventarioRepository,
                                 VentaRepository ventaRepository,
-                                DetalleVentaRepository detalleVentaRepository) {
+                                DetalleVentaRepository detalleVentaRepository,
+                                CotizacionRepository cotizacionRepository,
+                                MovimientoInventarioRepository movimientoInventarioRepository) {
         this.productoRepository = productoRepository;
         this.usuarioRepository = usuarioRepository;
         this.categoriaRepository = categoriaRepository;
@@ -67,6 +68,8 @@ public class DashboardController {
         this.inventarioRepository = inventarioRepository;
         this.ventaRepository = ventaRepository;
         this.detalleVentaRepository = detalleVentaRepository;
+        this.cotizacionRepository = cotizacionRepository;
+        this.movimientoInventarioRepository = movimientoInventarioRepository;
     }
 
     @GetMapping("/dashboard")
@@ -95,6 +98,42 @@ public class DashboardController {
             List<Inventario> stockBajo = inventarioRepository.findConStockBajo();
             model.addAttribute("stockBajo", stockBajo);
             model.addAttribute("cantidadStockBajo", stockBajo.size());
+        }
+
+        if (esJefeBodega) {
+            model.addAttribute("movimientosRecientes",
+                    movimientoInventarioRepository.findAllByOrderByFechaDesc(PageRequest.of(0, 8)).getContent());
+        }
+
+        if (esEmpleado) {
+            model.addAttribute("cotizacionesPendientes",
+                    cotizacionRepository.findByEstadoOrderByFechaEmisionDesc("PENDIENTE", PageRequest.of(0, 5)).getContent());
+
+            LocalDate hoy = LocalDate.now();
+            OffsetDateTime inicioHoy = hoy.atStartOfDay().atOffset(ZoneOffset.UTC);
+            OffsetDateTime finHoy = hoy.plusDays(1).atStartOfDay().atOffset(ZoneOffset.UTC);
+            List<Venta> ventasHoy = ventaRepository.findByFechaBetween(inicioHoy, finHoy).stream()
+                    .filter(v -> v.getUsuario() != null && v.getUsuario().getId().equals(usuario.getId()))
+                    .toList();
+            BigDecimal totalHoy = ventasHoy.stream().map(Venta::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+            model.addAttribute("ventasHoyCantidad", ventasHoy.size());
+            model.addAttribute("ventasHoyTotal", totalHoy);
+        }
+
+        if (esCliente) {
+            var clienteOpt = clienteRepository.findByUsuarioId(usuario.getId());
+            if (clienteOpt.isPresent()) {
+                Long clienteId = clienteOpt.get().getId();
+                model.addAttribute("misCotizaciones",
+                        cotizacionRepository.findByClienteIdOrderByFechaEmisionDesc(clienteId, PageRequest.of(0, 5)).getContent());
+                model.addAttribute("misCompras",
+                        ventaRepository.findByClienteIdOrderByFechaDesc(clienteId, PageRequest.of(0, 5)).getContent());
+                // Historial completo, solo para sumar el total gastado (no se muestra entero en pantalla).
+                List<Venta> historialCompleto = ventaRepository
+                        .findByClienteIdOrderByFechaDesc(clienteId, PageRequest.of(0, 1000)).getContent();
+                BigDecimal totalGastado = historialCompleto.stream().map(Venta::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+                model.addAttribute("totalGastado", totalGastado);
+            }
         }
 
         if (esAdmin) {

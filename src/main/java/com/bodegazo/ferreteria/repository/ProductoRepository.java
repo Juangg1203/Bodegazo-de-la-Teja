@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +18,8 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     Page<Producto> findByNombreContainingIgnoreCase(String nombre, Pageable pageable);
     Page<Producto> findByTipoProductoIn(List<String> tipos, Pageable pageable);
     Page<Producto> findByTipoProductoInAndNombreContainingIgnoreCase(List<String> tipos, String nombre, Pageable pageable);
+
+    List<Producto> findByTipoProductoAndLargoMAndActivoTrueOrderByNombre(String tipoProducto, BigDecimal largoM);
 
     @org.springframework.data.jpa.repository.Query(
         "SELECT p.categoria.nombre, COUNT(p) FROM Producto p WHERE p.activo = true GROUP BY p.categoria.nombre"

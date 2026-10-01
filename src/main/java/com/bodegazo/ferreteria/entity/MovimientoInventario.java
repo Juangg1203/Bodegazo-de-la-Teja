@@ -79,5 +79,10 @@ public class MovimientoInventario {
     public void setUsuario(Usuario usuario) { this.usuario = usuario; }
 
     public OffsetDateTime getFecha() { return fecha; }
+
+    /** Fecha ya formateada como texto — para usar en JSP sin el problema de fmt:formatDate con OffsetDateTime. */
+    public String getFechaFormateada() {
+        return fecha != null ? fecha.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "";
+    }
     public void setFecha(OffsetDateTime fecha) { this.fecha = fecha; }
 }

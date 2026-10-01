@@ -48,6 +48,16 @@ public class SecurityConfig {
             "/login", "/registro", "/recuperar-password",
             "/error/**", "/mantenimiento",
             "/static/**", "/css/**", "/js/**", "/images/**", "/icons/**", "/fonts/**",
+            // Fotos de productos subidas por el admin: se muestran en el catálogo
+            // público (productos-lista.jsp, producto-detalle.jsp), así que el
+            // navegador debe poder cargarlas SIN estar autenticado. Si no están
+            // aquí, un visitante anónimo que entra al catálogo dispara una
+            // petición bloqueada hacia /uploads/xxx.webp; Spring Security la
+            // guarda como "última URL pedida" (RequestCache) y, al loguearse,
+            // defaultSuccessUrl(..., false) termina redirigiendo a ESA imagen
+            // en vez de al dashboard — la pantalla llena de imagen que se veía
+            // tras iniciar sesión salía de aquí.
+            "/uploads/**",
             "/webjars/**", "/favicon.ico", "/robots.txt", "/sitemap.xml"
     };
 
@@ -95,7 +105,9 @@ public class SecurityConfig {
                 .requestMatchers("/dashboard/**").authenticated()
                 .requestMatchers("/perfil/**").authenticated()
                 .requestMatchers("/calculadora-mantos", "/calculadora-tejas", "/calculadora-tejas/pdf")
-                    .hasAnyRole("EMPLEADO", "JEFE_BODEGA", "ADMINISTRADOR")
+                    .hasRole("EMPLEADO")
+                .requestMatchers("/plan-cortes", "/plan-cortes/pdf-bodeguero")
+                    .hasRole("JEFE_BODEGA")
                 .requestMatchers("/cotizaciones/**").hasAnyRole("CLIENTE", "EMPLEADO", "JEFE_BODEGA", "ADMINISTRADOR")
                 .requestMatchers("/ventas/**").hasAnyRole("EMPLEADO", "JEFE_BODEGA", "ADMINISTRADOR")
                 .requestMatchers("/inventario/**").hasAnyRole("JEFE_BODEGA", "ADMINISTRADOR")
@@ -108,7 +120,12 @@ public class SecurityConfig {
                 .loginProcessingUrl("/login")
                 .usernameParameter("correo")
                 .passwordParameter("password")
-                .defaultSuccessUrl("/dashboard", false)
+                // alwaysUse=true: siempre aterriza en /dashboard tras loguearse,
+                // sin importar si el navegador tenía guardada por ahí alguna otra
+                // petición (imagen, recurso estático, etc.) antes del login. Es
+                // el resguardo adicional para que el bug de la imagen de pantalla
+                // completa no pueda repetirse con ningún otro recurso público.
+                .defaultSuccessUrl("/dashboard", true)
                 .failureUrl("/login?error=true")
                 .permitAll()
             )

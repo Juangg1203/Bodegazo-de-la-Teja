@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MovimientoInventarioRepository extends JpaRepository<MovimientoInventario, Long> {
     Page<MovimientoInventario> findByProductoIdOrderByFechaDesc(Long productoId, Pageable pageable);
+    Page<MovimientoInventario> findAllByOrderByFechaDesc(Pageable pageable);
 }

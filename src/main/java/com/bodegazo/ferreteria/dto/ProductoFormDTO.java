@@ -28,6 +28,9 @@ public class ProductoFormDTO {
     private Boolean tieneAdhesivo;
     private MultipartFile imagen;
     private String imagenActual;
+    private MultipartFile fichaTecnica;
+    private String fichaTecnicaActual;
+    private java.util.List<MultipartFile> galeria;
     private BigDecimal stockActual;
     private BigDecimal stockMinimo;
     private String ubicacion;
@@ -85,6 +88,15 @@ public class ProductoFormDTO {
 
     public String getImagenActual() { return imagenActual; }
     public void setImagenActual(String imagenActual) { this.imagenActual = imagenActual; }
+
+    public MultipartFile getFichaTecnica() { return fichaTecnica; }
+    public void setFichaTecnica(MultipartFile fichaTecnica) { this.fichaTecnica = fichaTecnica; }
+
+    public String getFichaTecnicaActual() { return fichaTecnicaActual; }
+    public void setFichaTecnicaActual(String fichaTecnicaActual) { this.fichaTecnicaActual = fichaTecnicaActual; }
+
+    public java.util.List<MultipartFile> getGaleria() { return galeria; }
+    public void setGaleria(java.util.List<MultipartFile> galeria) { this.galeria = galeria; }
 
     public BigDecimal getStockActual() { return stockActual; }
     public void setStockActual(BigDecimal stockActual) { this.stockActual = stockActual; }

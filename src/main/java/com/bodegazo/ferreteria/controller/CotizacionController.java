@@ -125,9 +125,10 @@ public class CotizacionController {
     }
 
     @PostMapping("/cotizaciones/{id}/aceptar")
-    public String aceptar(@PathVariable Long id, @AuthenticationPrincipal CustomUserPrincipal usuario,
+    public String aceptar(@PathVariable Long id, @RequestParam String metodoPago,
+                           @AuthenticationPrincipal CustomUserPrincipal usuario,
                            RedirectAttributes redirectAttributes) {
-        Long ventaId = cotizacionService.aceptar(id, usuario.getId());
+        Long ventaId = cotizacionService.aceptar(id, usuario.getId(), metodoPago);
         redirectAttributes.addFlashAttribute("mensaje",
                 "Cotización aceptada. Se generó la venta #" + ventaId + " y se descontó el inventario.");
         return "redirect:/cotizaciones/" + id;

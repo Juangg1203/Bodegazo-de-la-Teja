@@ -15,6 +15,11 @@ public class Venta {
     public static final String ANULADA = "ANULADA";
     public static final String PENDIENTE = "PENDIENTE";
 
+    public static final String PAGO_EFECTIVO = "EFECTIVO";
+    public static final String PAGO_CONTRAENTREGA = "CONTRAENTREGA";
+    public static final String PAGO_TARJETA = "TARJETA";
+    public static final String PAGO_TRANSFERENCIA = "TRANSFERENCIA";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

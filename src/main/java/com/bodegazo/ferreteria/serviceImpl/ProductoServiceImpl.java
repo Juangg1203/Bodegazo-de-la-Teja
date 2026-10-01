@@ -41,6 +41,7 @@ public class ProductoServiceImpl implements ProductoService {
     private final MarcaRepository marcaRepository;
     private final ProveedorRepository proveedorRepository;
     private final InventarioRepository inventarioRepository;
+    private final com.bodegazo.ferreteria.repository.ProductoImagenRepository productoImagenRepository;
 
     @Value("${app.uploads.dir}")
     private String uploadsDir;
@@ -49,12 +50,14 @@ public class ProductoServiceImpl implements ProductoService {
                                 CategoriaRepository categoriaRepository,
                                 MarcaRepository marcaRepository,
                                 ProveedorRepository proveedorRepository,
-                                InventarioRepository inventarioRepository) {
+                                InventarioRepository inventarioRepository,
+                                com.bodegazo.ferreteria.repository.ProductoImagenRepository productoImagenRepository) {
         this.productoRepository = productoRepository;
         this.categoriaRepository = categoriaRepository;
         this.marcaRepository = marcaRepository;
         this.proveedorRepository = proveedorRepository;
         this.inventarioRepository = inventarioRepository;
+        this.productoImagenRepository = productoImagenRepository;
     }
 
     @Override
@@ -112,6 +115,7 @@ public class ProductoServiceImpl implements ProductoService {
         form.setGrosorMm(p.getGrosorMm());
         form.setTieneAdhesivo(p.getTieneAdhesivo());
         form.setImagenActual(p.getImagenPrincipal());
+        form.setFichaTecnicaActual(p.getFichaTecnicaPdf());
         if (p.getInventario() != null) {
             form.setStockActual(p.getInventario().getStockActual());
             form.setStockMinimo(p.getInventario().getStockMinimo());
@@ -169,6 +173,25 @@ public class ProductoServiceImpl implements ProductoService {
             producto.setImagenPrincipal(guardarImagen(form.getImagen()));
         }
 
+        if (form.getFichaTecnica() != null && !form.getFichaTecnica().isEmpty()) {
+            producto.setFichaTecnicaPdf(guardarArchivo(form.getFichaTecnica()));
+        }
+
+        if (form.getGaleria() != null && !form.getGaleria().isEmpty()) {
+            short ordenSiguiente = (short) productoImagenRepository.findByProductoIdOrderByOrdenAsc(
+                    producto.getId() != null ? producto.getId() : -1L).size();
+            for (MultipartFile foto : form.getGaleria()) {
+                if (foto == null || foto.isEmpty()) {
+                    continue;
+                }
+                com.bodegazo.ferreteria.entity.ProductoImagen imagen = new com.bodegazo.ferreteria.entity.ProductoImagen();
+                imagen.setProducto(producto);
+                imagen.setUrlImagen(guardarArchivo(foto));
+                imagen.setOrden(ordenSiguiente++);
+                producto.getImagenes().add(imagen);
+            }
+        }
+
         Producto guardado = productoRepository.save(producto);
 
         // Inventario: se crea si no existe, o se actualiza si el formulario trajo valores.
@@ -214,6 +237,11 @@ public class ProductoServiceImpl implements ProductoService {
 
     /** Guarda la imagen subida en el directorio de uploads y retorna la URL pública ("/uploads/archivo.ext"). */
     private String guardarImagen(MultipartFile archivo) {
+        return guardarArchivo(archivo);
+    }
+
+    /** Guarda cualquier archivo subido (imagen, PDF, etc.) en el directorio de uploads. */
+    private String guardarArchivo(MultipartFile archivo) {
         try {
             Path directorio = Path.of(uploadsDir);
             Files.createDirectories(directorio);
@@ -230,7 +258,7 @@ public class ProductoServiceImpl implements ProductoService {
 
             return "/uploads/" + nombreArchivo;
         } catch (IOException e) {
-            throw new UncheckedIOException("No se pudo guardar la imagen del producto", e);
+            throw new UncheckedIOException("No se pudo guardar el archivo del producto", e);
         }
     }
 

@@ -20,7 +20,7 @@ public interface CotizacionService {
     CotizacionDetalleDTO obtenerDetalle(Long id);
 
     /** Acepta la cotización: genera la venta correspondiente y descuenta inventario. */
-    Long aceptar(Long id, Long usuarioId);
+    Long aceptar(Long id, Long usuarioId, String metodoPago);
 
     void rechazar(Long id);
 }
