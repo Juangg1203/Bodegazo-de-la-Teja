@@ -14,8 +14,10 @@
         <h6 class="fw-bold mb-3">Enlaces</h6>
         <ul class="list-unstyled small">
           <li><a href="${pageContext.request.contextPath}/inicio">Inicio</a></li>
-          <li><a href="${pageContext.request.contextPath}/nosotros">Nosotros</a></li>
-          <li><a href="${pageContext.request.contextPath}/contacto">Contacto</a></li>
+          <sec:authorize access="!isAuthenticated() or hasRole('CLIENTE')">
+            <li><a href="${pageContext.request.contextPath}/nosotros">Nosotros</a></li>
+            <li><a href="${pageContext.request.contextPath}/contacto">Contacto</a></li>
+          </sec:authorize>
         </ul>
       </div>
       <div class="col-md-3">

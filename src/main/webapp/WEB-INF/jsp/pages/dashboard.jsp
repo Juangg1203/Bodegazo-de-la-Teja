@@ -286,22 +286,17 @@
 
       <h5 class="fw-bold mb-3"><i class="bi bi-headset text-accent me-2"></i>Accesos rápidos</h5>
       <div class="row g-3 mb-4">
-        <div class="col-md-3">
-          <a href="${pageContext.request.contextPath}/ventas/rapida" class="btn btn-accent w-100 py-3">
-            <i class="bi bi-lightning-charge-fill me-2"></i>Venta Rápida
-          </a>
-        </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
           <a href="${pageContext.request.contextPath}/calculadora-tejas" class="btn btn-outline-accent w-100 py-3">
             <i class="bi bi-calculator-fill me-2"></i>Calculadora de Tejas
           </a>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
           <a href="${pageContext.request.contextPath}/calculadora-mantos" class="btn btn-outline-accent w-100 py-3">
             <i class="bi bi-calculator-fill me-2"></i>Calculadora de Mantos
           </a>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
           <a href="${pageContext.request.contextPath}/productos" class="btn btn-outline-accent w-100 py-3">
             <i class="bi bi-grid-3x3-gap-fill me-2"></i>Catálogo
           </a>

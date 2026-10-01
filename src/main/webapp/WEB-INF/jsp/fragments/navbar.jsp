@@ -69,14 +69,9 @@
             </a>
           </li>
         </sec:authorize>
-        <%-- Venta Rápida/Ventas son operación de mostrador (Empleado/Jefe de
-             Bodega). El Administrador no vende desde aquí. --%>
+        <%-- Ventas es operación de mostrador (Empleado/Jefe de Bodega).
+             El Administrador no vende desde aquí. --%>
         <sec:authorize access="hasAnyRole('EMPLEADO','JEFE_BODEGA')">
-          <li class="nav-item">
-            <a class="nav-link" href="${pageContext.request.contextPath}/ventas/rapida">
-              <i class="bi bi-lightning-charge-fill me-1"></i>Venta Rápida
-            </a>
-          </li>
           <li class="nav-item">
             <a class="nav-link" href="${pageContext.request.contextPath}/ventas">
               <i class="bi bi-receipt me-1"></i>Ventas
@@ -92,8 +87,13 @@
              cada página. --%>
         <%-- Usuarios: función 100% administrativa. Solo vive como botón dentro
              del Dashboard del Administrador (ver dashboard.jsp), no en la barra. --%>
-        <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/nosotros">Nosotros</a></li>
-        <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/contacto">Contacto</a></li>
+        <%-- Nosotros/Contacto son información para quien compra (visitante o
+             cliente). El personal interno (Empleado, Jefe de Bodega,
+             Administrador) ya trabaja aquí, no necesita verlos en su menú. --%>
+        <sec:authorize access="!isAuthenticated() or hasRole('CLIENTE')">
+          <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/nosotros">Nosotros</a></li>
+          <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/contacto">Contacto</a></li>
+        </sec:authorize>
       </ul>
       <ul class="navbar-nav">
         <sec:authorize access="isAuthenticated()">

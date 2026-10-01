@@ -153,13 +153,17 @@
                   <c:when test="${colorSeleccionado == 'AZUL'}"><c:set var="colorHex" value="#1f4e8c"/></c:when>
                   <c:when test="${colorSeleccionado == 'TRANSPARENTE'}"><c:set var="colorHex" value="rgba(200,230,255,0.55)"/></c:when>
                 </c:choose>
-                <div class="border rounded p-2" style="background: repeating-linear-gradient(45deg, #eee, #eee 10px, #e4e4e4 10px, #e4e4e4 20px); overflow-x:auto;">
+                <div class="simulador-techo-fondo">
                   <c:choose>
                     <c:when test="${resultado.cantidadTejas <= 400}">
-                      <div style="display:grid; grid-template-columns: repeat(${resultado.tejasPorHilera}, minmax(28px, 1fr)); grid-template-rows: repeat(${resultado.hileras}, 24px); gap:2px; min-width: 320px;">
-                        <c:forEach begin="1" end="${resultado.hileras * resultado.tejasPorHilera}">
-                          <div class="simulador-teja" style="background-color: ${colorHex}; border-radius: 3px;"></div>
-                        </c:forEach>
+                      <div class="simulador-techo-wrap" style="min-width: 320px;">
+                        <div class="simulador-techo-caballete"></div>
+                        <div class="simulador-techo-panel">
+                          <c:forEach begin="1" end="${resultado.hileras}">
+                            <div class="simulador-techo-hilera"
+                                 style="background-color: ${colorHex}; background-image: repeating-linear-gradient(90deg, rgba(0,0,0,0.14) 0, rgba(0,0,0,0.14) 2px, transparent 2px, transparent calc(100% / ${resultado.tejasPorHilera}));"></div>
+                          </c:forEach>
+                        </div>
                       </div>
                     </c:when>
                     <c:otherwise>
@@ -168,8 +172,8 @@
                   </c:choose>
                 </div>
                 <p class="text-muted small mt-2 mb-0">
-                  Cada rectángulo representa una teja
-                  (<c:out value="${resultado.hileras}"/> hileras x <c:out value="${resultado.tejasPorHilera}"/> tejas por hilera).
+                  Cada franja representa una hilera de tejas
+                  (<c:out value="${resultado.hileras}"/> hileras x <c:out value="${resultado.tejasPorHilera}"/> tejas por hilera, marcadas por las líneas verticales).
                   Es solo una referencia visual, no a escala real.
                 </p>
               </div>
