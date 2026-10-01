@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <jsp:include page="/WEB-INF/jsp/fragments/head.jsp"/>
 <body>
 <jsp:include page="/WEB-INF/jsp/fragments/navbar.jsp"/>
@@ -14,8 +15,15 @@
       </c:forEach>
     </p>
 
-    <!-- ================= ADMINISTRADOR: reportes generales ================= -->
+    <!-- ================= ADMINISTRADOR: panel administrativo, estadísticas y control ================= -->
     <c:if test="${esAdmin}">
+      <div class="alert alert-light border d-flex align-items-center mb-4">
+        <i class="bi bi-shield-lock-fill text-accent fs-4 me-2"></i>
+        <div>
+          <strong>Panel de Administración</strong> — gestión, estadísticas y control del sistema.
+          La venta, cotización y consulta del catálogo son funciones operativas de Empleados, Jefe de Bodega y Clientes.
+        </div>
+      </div>
       <h5 class="fw-bold mb-3"><i class="bi bi-graph-up-arrow text-accent me-2"></i>Reportes generales</h5>
       <div class="row g-3 mb-4">
         <div class="col-6 col-md-3">
@@ -48,24 +56,29 @@
         </div>
       </div>
       <div class="row g-3 mb-4">
-        <div class="col-md-4">
+        <div class="col-md-3">
           <a href="${pageContext.request.contextPath}/usuarios" class="btn btn-outline-accent w-100 py-3">
             <i class="bi bi-people-fill me-2"></i>Gestionar usuarios
           </a>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
+          <a href="${pageContext.request.contextPath}/administracion/productos" class="btn btn-outline-accent w-100 py-3">
+            <i class="bi bi-gear-fill me-2"></i>Administrar productos
+          </a>
+        </div>
+        <div class="col-md-3">
           <a href="${pageContext.request.contextPath}/inventario" class="btn btn-outline-accent w-100 py-3">
             <i class="bi bi-box-seam-fill me-2"></i>Ver inventario
           </a>
         </div>
-        <div class="col-md-4">
-          <a href="${pageContext.request.contextPath}/reportes" class="btn btn-outline-accent w-100 py-3">
-            <i class="bi bi-file-earmark-bar-graph-fill me-2"></i>Reportes detallados
+        <div class="col-md-3">
+          <a href="#graficosAdmin" class="btn btn-outline-accent w-100 py-3">
+            <i class="bi bi-file-earmark-bar-graph-fill me-2"></i>Ver estadísticas
           </a>
         </div>
       </div>
 
-      <h5 class="fw-bold mb-3 mt-5"><i class="bi bi-bar-chart-line-fill text-accent me-2"></i>Gráficos</h5>
+      <h5 id="graficosAdmin" class="fw-bold mb-3 mt-5"><i class="bi bi-bar-chart-line-fill text-accent me-2"></i>Gráficos</h5>
       <div class="row g-3 mb-4">
         <div class="col-lg-6">
           <div class="card card-bodegazo p-3">
@@ -174,58 +187,186 @@
           </div>
         </c:otherwise>
       </c:choose>
-      <div class="row g-3 mb-4">
-        <div class="col-md-4">
-          <a href="${pageContext.request.contextPath}/inventario" class="btn btn-outline-accent w-100 py-3">
-            <i class="bi bi-box-seam-fill me-2"></i>Gestionar inventario
-          </a>
+
+      <c:if test="${not empty movimientosRecientes}">
+        <h6 class="fw-bold mb-2">Movimientos recientes de inventario</h6>
+        <div class="card card-bodegazo p-0 overflow-hidden mb-4">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr><th>Producto</th><th>Tipo</th><th class="text-end">Cantidad</th><th>Fecha</th></tr>
+            </thead>
+            <tbody>
+              <c:forEach var="m" items="${movimientosRecientes}">
+                <tr>
+                  <td><c:out value="${m.producto.nombre}"/></td>
+                  <td>
+                    <c:choose>
+                      <c:when test="${m.tipoMovimiento == 'ENTRADA'}"><span class="badge bg-success">Entrada</span></c:when>
+                      <c:when test="${m.tipoMovimiento == 'SALIDA'}"><span class="badge bg-danger">Salida</span></c:when>
+                      <c:when test="${m.tipoMovimiento == 'VENTA'}"><span class="badge bg-primary">Venta</span></c:when>
+                      <c:otherwise><span class="badge bg-secondary"><c:out value="${m.tipoMovimiento}"/></span></c:otherwise>
+                    </c:choose>
+                  </td>
+                  <td class="text-end"><c:out value="${m.cantidad}"/></td>
+                  <td><c:out value="${m.fechaFormateada}"/></td>
+                </tr>
+              </c:forEach>
+            </tbody>
+          </table>
         </div>
-        <div class="col-md-4">
-          <a href="${pageContext.request.contextPath}/calculadora-tejas" class="btn btn-outline-accent w-100 py-3">
-            <i class="bi bi-calculator-fill me-2"></i>Calculadora de Tejas
-          </a>
-        </div>
-        <div class="col-md-4">
-          <a href="${pageContext.request.contextPath}/calculadora-mantos" class="btn btn-outline-accent w-100 py-3">
-            <i class="bi bi-calculator-fill me-2"></i>Calculadora de Mantos
-          </a>
+      </c:if>
+
+      <%-- Apartado separado a propósito: Plan de Cortes, Inventario y
+           Administrar Productos ya no están en la barra de arriba (recargaba
+           la navegación); se consultan de vez en cuando, así que quedan aquí
+           agrupados en su propio bloque "Herramientas de Bodega". --%>
+      <div class="card card-bodegazo p-3 mb-4" style="border-style:dashed;">
+        <h6 class="fw-bold mb-3 text-muted">
+          <i class="bi bi-tools me-2"></i>Herramientas de Bodega
+          <span class="badge bg-secondary fw-normal ms-1">uso ocasional</span>
+        </h6>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <a href="${pageContext.request.contextPath}/inventario" class="btn btn-outline-accent w-100 py-3">
+              <i class="bi bi-box-seam-fill me-2"></i>Gestionar inventario
+            </a>
+          </div>
+          <div class="col-md-4">
+            <a href="${pageContext.request.contextPath}/plan-cortes" class="btn btn-outline-accent w-100 py-3">
+              <i class="bi bi-scissors me-2"></i>Plan de Cortes
+            </a>
+          </div>
+          <div class="col-md-4">
+            <a href="${pageContext.request.contextPath}/administracion/productos" class="btn btn-outline-accent w-100 py-3">
+              <i class="bi bi-gear-fill me-2"></i>Administrar Productos
+            </a>
+          </div>
         </div>
       </div>
     </c:if>
 
-    <!-- ================= EMPLEADO: accesos rápidos de venta ================= -->
+    <!-- ================= EMPLEADO: mis ventas de hoy + cotizaciones pendientes ================= -->
     <c:if test="${esEmpleado}">
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <div class="card card-bodegazo p-4 text-center">
+            <div class="text-muted small">Mis ventas de hoy</div>
+            <div class="fs-2 fw-bold text-accent"><c:out value="${ventasHoyCantidad}"/></div>
+            <div class="text-muted">$<fmt:formatNumber value="${ventasHoyTotal}" type="number" groupingUsed="true" maxFractionDigits="0"/></div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card card-bodegazo p-4 text-center">
+            <div class="text-muted small">Cotizaciones pendientes por atender</div>
+            <div class="fs-2 fw-bold text-accent"><c:out value="${cotizacionesPendientes.size()}"/></div>
+            <a href="${pageContext.request.contextPath}/cotizaciones" class="small">Ver todas →</a>
+          </div>
+        </div>
+      </div>
+
+      <c:if test="${not empty cotizacionesPendientes}">
+        <h6 class="fw-bold mb-2">Últimas cotizaciones pendientes</h6>
+        <div class="card card-bodegazo p-0 overflow-hidden mb-4">
+          <table class="table table-hover align-middle mb-0">
+            <tbody>
+              <c:forEach var="cot" items="${cotizacionesPendientes}">
+                <tr>
+                  <td>#<c:out value="${cot.id}"/></td>
+                  <td><c:out value="${cot.clienteNombre}"/></td>
+                  <td class="text-end">$<fmt:formatNumber value="${cot.total}" type="number" groupingUsed="true" maxFractionDigits="0"/></td>
+                  <td class="text-end">
+                    <a href="${pageContext.request.contextPath}/cotizaciones/${cot.id}" class="btn btn-sm btn-outline-accent">Ver</a>
+                  </td>
+                </tr>
+              </c:forEach>
+            </tbody>
+          </table>
+        </div>
+      </c:if>
+
       <h5 class="fw-bold mb-3"><i class="bi bi-headset text-accent me-2"></i>Accesos rápidos</h5>
       <div class="row g-3 mb-4">
+        <div class="col-md-3">
+          <a href="${pageContext.request.contextPath}/ventas/rapida" class="btn btn-accent w-100 py-3">
+            <i class="bi bi-lightning-charge-fill me-2"></i>Venta Rápida
+          </a>
+        </div>
+        <div class="col-md-3">
+          <a href="${pageContext.request.contextPath}/calculadora-tejas" class="btn btn-outline-accent w-100 py-3">
+            <i class="bi bi-calculator-fill me-2"></i>Calculadora de Tejas
+          </a>
+        </div>
+        <div class="col-md-3">
+          <a href="${pageContext.request.contextPath}/calculadora-mantos" class="btn btn-outline-accent w-100 py-3">
+            <i class="bi bi-calculator-fill me-2"></i>Calculadora de Mantos
+          </a>
+        </div>
         <div class="col-md-3">
           <a href="${pageContext.request.contextPath}/productos" class="btn btn-outline-accent w-100 py-3">
             <i class="bi bi-grid-3x3-gap-fill me-2"></i>Catálogo
           </a>
         </div>
-        <div class="col-md-3">
-          <a href="${pageContext.request.contextPath}/calculadora-tejas" class="btn btn-outline-accent w-100 py-3">
-            <i class="bi bi-calculator-fill me-2"></i>Calculadora de Tejas
-          </a>
-        </div>
-        <div class="col-md-3">
-          <a href="${pageContext.request.contextPath}/calculadora-mantos" class="btn btn-outline-accent w-100 py-3">
-            <i class="bi bi-calculator-fill me-2"></i>Calculadora de Mantos
-          </a>
-        </div>
-        <div class="col-md-3">
-          <a href="${pageContext.request.contextPath}/cotizaciones" class="btn btn-outline-accent w-100 py-3">
-            <i class="bi bi-file-earmark-text-fill me-2"></i>Cotizaciones
-          </a>
-        </div>
       </div>
     </c:if>
 
-    <!-- ================= CLIENTE: bienvenida simple ================= -->
+    <!-- ================= CLIENTE: mis cotizaciones y compras ================= -->
     <c:if test="${esCliente}">
-      <div class="alert alert-light border">
-        <i class="bi bi-info-circle text-accent me-2"></i>
-        Desde aquí podrás ver tus cotizaciones y pedidos cuando ese módulo esté disponible.
-      </div>
+      <c:choose>
+        <c:when test="${not empty misCotizaciones || not empty misCompras}">
+          <div class="row g-3 mb-4">
+            <div class="col-md-4">
+              <div class="card card-bodegazo p-4 text-center">
+                <div class="text-muted small">Total gastado</div>
+                <div class="fs-4 fw-bold text-accent">$<fmt:formatNumber value="${totalGastado}" type="number" groupingUsed="true" maxFractionDigits="0"/></div>
+              </div>
+            </div>
+          </div>
+
+          <c:if test="${not empty misCotizaciones}">
+            <h6 class="fw-bold mb-2">Mis cotizaciones recientes</h6>
+            <div class="card card-bodegazo p-0 overflow-hidden mb-4">
+              <table class="table table-hover align-middle mb-0">
+                <tbody>
+                  <c:forEach var="cot" items="${misCotizaciones}">
+                    <tr>
+                      <td>#<c:out value="${cot.id}"/></td>
+                      <td><span class="badge bg-secondary"><c:out value="${cot.estado}"/></span></td>
+                      <td class="text-end">$<fmt:formatNumber value="${cot.total}" type="number" groupingUsed="true" maxFractionDigits="0"/></td>
+                      <td class="text-end">
+                        <a href="${pageContext.request.contextPath}/cotizaciones/${cot.id}" class="btn btn-sm btn-outline-accent">Ver</a>
+                      </td>
+                    </tr>
+                  </c:forEach>
+                </tbody>
+              </table>
+            </div>
+          </c:if>
+
+          <c:if test="${not empty misCompras}">
+            <h6 class="fw-bold mb-2">Mis compras recientes</h6>
+            <div class="card card-bodegazo p-0 overflow-hidden mb-4">
+              <table class="table table-hover align-middle mb-0">
+                <tbody>
+                  <c:forEach var="v" items="${misCompras}">
+                    <tr>
+                      <td>#<c:out value="${v.id}"/></td>
+                      <td><c:out value="${v.metodoPago}"/></td>
+                      <td class="text-end">$<fmt:formatNumber value="${v.total}" type="number" groupingUsed="true" maxFractionDigits="0"/></td>
+                    </tr>
+                  </c:forEach>
+                </tbody>
+              </table>
+            </div>
+          </c:if>
+        </c:when>
+        <c:otherwise>
+          <div class="alert alert-light border">
+            <i class="bi bi-info-circle text-accent me-2"></i>
+            Todavía no tienes cotizaciones ni compras — cuando hagas tu primera cotización, la vas a ver aquí.
+          </div>
+        </c:otherwise>
+      </c:choose>
+
       <div class="row g-3 mb-4">
         <div class="col-md-6">
           <a href="${pageContext.request.contextPath}/productos" class="btn btn-outline-accent w-100 py-3">

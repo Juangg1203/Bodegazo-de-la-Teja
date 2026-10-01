@@ -577,3 +577,100 @@ UPDATE productos SET marca_id = (SELECT id FROM marcas WHERE nombre = 'Texsa')
 WHERE codigo LIKE 'CINTA-TXS-%';
 UPDATE productos SET marca_id = (SELECT id FROM marcas WHERE nombre = 'Edil')
 WHERE codigo LIKE 'CINTA-EDIL-%';
+
+-- =====================================================================
+-- ICONOS PLACEHOLDER por categoria/color
+-- =====================================================================
+
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-liquido.svg'
+WHERE codigo LIKE 'EMU-%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-liquido.svg'
+WHERE codigo LIKE 'ALU-%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-liquido.svg'
+WHERE codigo LIKE 'ASF-%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-liquido.svg'
+WHERE codigo LIKE 'CEM-%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-liquido.svg'
+WHERE codigo LIKE 'IMPAC7000%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-liquido.svg'
+WHERE codigo LIKE 'SIKAF7-%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-liquido.svg'
+WHERE codigo LIKE 'SIKAF100-%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-liquido.svg'
+WHERE codigo LIKE 'IMPTX7-%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-tubo.svg'
+WHERE codigo LIKE 'SIKAFLEX-%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-manto.svg'
+WHERE codigo LIKE 'MTX-%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-manto.svg'
+WHERE codigo LIKE 'MCOL-FIB-%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-manto.svg'
+WHERE codigo LIKE 'MIPA-%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-manto.svg'
+WHERE codigo LIKE 'MROOF%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-manto.svg'
+WHERE codigo LIKE 'MEDIL-%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-manto.svg'
+WHERE codigo LIKE 'MADH-%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-manto.svg'
+WHERE codigo LIKE 'MFIB-%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-manto.svg'
+WHERE codigo LIKE 'MTEX-%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-manto.svg'
+WHERE codigo LIKE 'MGRAV-%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-manto.svg'
+WHERE codigo LIKE 'MIPA3000' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-manto.svg'
+WHERE codigo LIKE 'MCOL2' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-manto.svg'
+WHERE codigo LIKE 'MMET2' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-cinta.svg'
+WHERE codigo LIKE 'CINTA-%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-accesorio.svg'
+WHERE codigo LIKE 'CAB-%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-accesorio.svg'
+WHERE codigo LIKE 'LIM-%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-accesorio.svg'
+WHERE codigo LIKE 'TOR-%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-accesorio.svg'
+WHERE codigo LIKE 'CAP-%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-teja-terracota.svg'
+WHERE codigo LIKE '%-TER' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-teja-terracota.svg'
+WHERE codigo LIKE '%TER' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-teja-naranja.svg'
+WHERE codigo LIKE '%-NAR' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-teja-naranja.svg'
+WHERE codigo LIKE '%NAR' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-teja-negra.svg'
+WHERE codigo LIKE '%-NEG' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-teja-transparente.svg'
+WHERE codigo LIKE '%-TRP%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-teja-transparente.svg'
+WHERE codigo LIKE '%TRANS%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-teja-traslucida.svg'
+WHERE codigo LIKE '%-TRL%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-teja-azul.svg'
+WHERE codigo LIKE '%-AZU%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-teja-azul.svg'
+WHERE codigo LIKE '%AZ' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-teja-roja.svg'
+WHERE codigo LIKE '%-ROJ%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-teja-roja.svg'
+WHERE codigo LIKE '%-ROJA' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-teja-verde.svg'
+WHERE codigo LIKE '%-VER%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-teja-verde.svg'
+WHERE codigo LIKE '%-VERDE' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-teja-blanca.svg'
+WHERE codigo LIKE '%-BLA%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-teja-blanca.svg'
+WHERE codigo LIKE '%-BLANCA' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-teja-terracota.svg'
+WHERE codigo LIKE 'TUC-%' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-teja-azul.svg'
+WHERE codigo LIKE 'TTA-590' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-teja-azul.svg'
+WHERE codigo LIKE 'TTA-1180' AND imagen_principal IS NULL;
+UPDATE productos SET imagen_principal = '/images/placeholders/icon-teja-blanca.svg'
+WHERE codigo LIKE 'TCB-%' AND imagen_principal IS NULL;

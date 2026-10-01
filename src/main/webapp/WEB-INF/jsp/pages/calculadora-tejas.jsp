@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <jsp:include page="/WEB-INF/jsp/fragments/head.jsp"/>
 <body>
 <jsp:include page="/WEB-INF/jsp/fragments/navbar.jsp"/>
@@ -240,6 +241,41 @@
                   </c:if>
                 </div>
               </div>
+
+              <!-- Agregar directamente a una cotización -->
+              <sec:authorize access="isAuthenticated()">
+                <div class="card card-bodegazo p-3 mb-3">
+                  <h6 class="fw-bold mb-3"><i class="bi bi-cart-plus-fill text-accent me-2"></i>Agregar a cotización</h6>
+                  <c:choose>
+                    <c:when test="${not empty productosCoincidentes}">
+                      <form action="${pageContext.request.contextPath}/cotizaciones/carrito/agregar" method="post">
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                        <input type="hidden" name="cantidad" value="${cantidadFinalTejas}">
+                        <div class="mb-2">
+                          <label class="form-label small fw-semibold">Producto</label>
+                          <select class="form-select" name="productoId" required>
+                            <c:forEach var="p" items="${productosCoincidentes}">
+                              <option value="${p.id}"><c:out value="${p.nombre}"/> (${p.codigo})</option>
+                            </c:forEach>
+                          </select>
+                        </div>
+                        <p class="text-muted small mb-2">Se agregará una cantidad de <strong><c:out value="${cantidadFinalTejas}"/></strong> teja(s) — el total ya calculado arriba.</p>
+                        <button type="submit" class="btn btn-accent w-100">
+                          <i class="bi bi-cart-plus-fill me-1"></i> Agregar ${cantidadFinalTejas} teja(s) a la cotización
+                        </button>
+                      </form>
+                    </c:when>
+                    <c:otherwise>
+                      <p class="text-muted small mb-0">No hay ningún producto de teja cargado con este tipo y largo exactos (${resultado.largoModuloM} m) — pídele al administrador que lo agregue en "Administrar Productos" para poder cotizarlo directamente.</p>
+                    </c:otherwise>
+                  </c:choose>
+                </div>
+              </sec:authorize>
+              <sec:authorize access="!isAuthenticated()">
+                <div class="alert alert-light border small">
+                  <a href="${pageContext.request.contextPath}/login">Inicia sesión</a> para agregar este resultado directamente a una cotización.
+                </div>
+              </sec:authorize>
 
               <form action="${pageContext.request.contextPath}/calculadora-tejas/pdf" method="post" target="_blank" class="mt-3">
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

@@ -56,13 +56,20 @@
         <c:if test="${esPersonal && cotizacion.estado == 'PENDIENTE'}">
           <div class="card card-bodegazo p-4">
             <h6 class="fw-bold mb-3">Acciones</h6>
+            <form action="${pageContext.request.contextPath}/cotizaciones/${cotizacion.id}/aceptar" method="post" class="mb-3">
+              <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+              <label class="form-label small fw-semibold">Método de pago</label>
+              <select class="form-select mb-3" name="metodoPago" required>
+                <option value="EFECTIVO">Efectivo</option>
+                <option value="CONTRAENTREGA">Contraentrega</option>
+                <option value="TARJETA">Tarjeta</option>
+                <option value="TRANSFERENCIA">Transferencia / consignación</option>
+              </select>
+              <button type="submit" class="btn btn-success w-100" onclick="return confirm('¿Aceptar esta cotización? Se generará la venta y se descontará el inventario.');">
+                <i class="bi bi-check-circle-fill me-1"></i> Aceptar y generar venta
+              </button>
+            </form>
             <div class="d-flex gap-2">
-              <form action="${pageContext.request.contextPath}/cotizaciones/${cotizacion.id}/aceptar" method="post" class="flex-fill">
-                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                <button type="submit" class="btn btn-success w-100" onclick="return confirm('¿Aceptar esta cotización? Se generará la venta y se descontará el inventario.');">
-                  <i class="bi bi-check-circle-fill me-1"></i> Aceptar y generar venta
-                </button>
-              </form>
               <form action="${pageContext.request.contextPath}/cotizaciones/${cotizacion.id}/rechazar" method="post" class="flex-fill">
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 <button type="submit" class="btn btn-outline-danger w-100" onclick="return confirm('¿Rechazar esta cotización?');">
@@ -99,16 +106,11 @@
             <span class="text-muted">Válida hasta</span><span><c:out value="${cotizacion.fechaValidez}"/></span>
           </div>
           <hr>
-          <div class="d-flex justify-content-between small mb-1">
-            <span class="text-muted">Subtotal</span><span><fmt:formatNumber value="${cotizacion.subtotal}" type="currency" currencySymbol="$"/></span>
-          </div>
-          <div class="d-flex justify-content-between small mb-2">
-            <span class="text-muted">IVA</span><span><fmt:formatNumber value="${cotizacion.impuesto}" type="currency" currencySymbol="$"/></span>
-          </div>
           <div class="d-flex justify-content-between">
             <span class="fw-bold">Total</span>
             <span class="fw-bold text-accent fs-5"><fmt:formatNumber value="${cotizacion.total}" type="currency" currencySymbol="$"/></span>
           </div>
+          <p class="text-muted small text-end mb-0">IVA incluido</p>
         </div>
       </div>
     </div>

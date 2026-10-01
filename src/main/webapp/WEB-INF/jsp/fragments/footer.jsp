@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <footer class="bodegazo-footer mt-auto pt-5 pb-4">
   <div class="container">
     <div class="row gy-4">
@@ -22,8 +23,10 @@
         <ul class="list-unstyled small">
           <li><a href="${pageContext.request.contextPath}/impermeabilizantes">Impermeabilizantes</a></li>
           <li><a href="${pageContext.request.contextPath}/tejas-upvc">Tejas UPVC</a></li>
-          <li><a href="${pageContext.request.contextPath}/calculadora-mantos">Calculadora de Mantos</a></li>
-          <li><a href="${pageContext.request.contextPath}/calculadora-tejas">Calculadora de Tejas</a></li>
+          <sec:authorize access="hasRole('EMPLEADO')">
+            <li><a href="${pageContext.request.contextPath}/calculadora-mantos">Calculadora de Mantos</a></li>
+            <li><a href="${pageContext.request.contextPath}/calculadora-tejas">Calculadora de Tejas</a></li>
+          </sec:authorize>
         </ul>
       </div>
       <div class="col-md-3">

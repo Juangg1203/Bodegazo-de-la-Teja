@@ -52,7 +52,7 @@
               </div>
             </c:if>
 
-            <form action="${pageContext.request.contextPath}/contacto" method="post">
+            <form action="${pageContext.request.contextPath}/contacto" method="post" id="formContacto">
               <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
               <div class="mb-3">
@@ -68,11 +68,24 @@
                 <textarea class="form-control" id="mensaje" name="mensaje" rows="5" required maxlength="1000"></textarea>
               </div>
               <button type="submit" class="btn btn-accent w-100">
-                <i class="bi bi-send-fill me-1"></i> Enviar mensaje
+                <i class="bi bi-whatsapp me-1"></i> Enviar por WhatsApp
               </button>
+              <p class="text-muted small mt-2 mb-0">Se abrirá WhatsApp con tu mensaje ya escrito — solo confirma el envío ahí.</p>
             </form>
           </div>
         </div>
+
+        <script>
+          document.getElementById('formContacto').addEventListener('submit', function () {
+            var nombre = document.getElementById('nombre').value;
+            var correo = document.getElementById('correo').value;
+            var mensaje = document.getElementById('mensaje').value;
+            var texto = 'Hola, mi nombre es ' + nombre + ' (' + correo + ').\n\n' + mensaje;
+            var url = 'https://wa.me/57${empresaWhatsapp}?text=' + encodeURIComponent(texto);
+            window.open(url, '_blank');
+            // El formulario sigue su envío normal para mostrar el mensaje de "gracias" en esta página.
+          });
+        </script>
       </div>
     </div>
   </section>

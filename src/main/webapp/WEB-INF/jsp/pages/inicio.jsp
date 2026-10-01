@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <jsp:include page="/WEB-INF/jsp/fragments/head.jsp"/>
 <body>
 <jsp:include page="/WEB-INF/jsp/fragments/navbar.jsp"/>
@@ -9,12 +10,22 @@
     <div class="container text-center">
       <h1 class="display-4 mb-3">Impermeabilizaciones y Tejas UPVC de calidad</h1>
       <p class="lead mb-4">Todo lo que necesitas para tu cubierta, con asesoría técnica y cálculo exacto de material.</p>
-      <a href="${pageContext.request.contextPath}/calculadora-tejas" class="btn btn-accent btn-lg me-2">
-        <i class="bi bi-calculator-fill me-1"></i> Calcula tus tejas
-      </a>
-      <a href="${pageContext.request.contextPath}/calculadora-mantos" class="btn btn-outline-light btn-lg">
-        <i class="bi bi-calculator me-1"></i> Calcula tus mantos
-      </a>
+      <sec:authorize access="hasRole('EMPLEADO')">
+        <a href="${pageContext.request.contextPath}/calculadora-tejas" class="btn btn-accent btn-lg me-2">
+          <i class="bi bi-calculator-fill me-1"></i> Calcula tus tejas
+        </a>
+        <a href="${pageContext.request.contextPath}/calculadora-mantos" class="btn btn-outline-light btn-lg">
+          <i class="bi bi-calculator me-1"></i> Calcula tus mantos
+        </a>
+      </sec:authorize>
+      <sec:authorize access="!hasRole('EMPLEADO')">
+        <a href="${pageContext.request.contextPath}/tejas-upvc" class="btn btn-accent btn-lg me-2">
+          <i class="bi bi-grid-3x3-gap-fill me-1"></i> Ver Tejas UPVC
+        </a>
+        <a href="${pageContext.request.contextPath}/impermeabilizantes" class="btn btn-outline-light btn-lg">
+          <i class="bi bi-droplet-fill me-1"></i> Ver Impermeabilizantes
+        </a>
+      </sec:authorize>
     </div>
   </section>
 

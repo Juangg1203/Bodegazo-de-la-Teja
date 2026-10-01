@@ -170,6 +170,26 @@
             <p class="text-muted small mt-2 mb-0">Formatos JPG o PNG, hasta 10 MB. Si no seleccionas una nueva, se conserva la actual.</p>
           </div>
 
+          <div class="card card-bodegazo p-4 mb-4">
+            <h5 class="fw-bold mb-3"><i class="bi bi-file-earmark-pdf-fill text-accent me-2"></i>Ficha técnica</h5>
+            <c:if test="${not empty form.fichaTecnicaActual}">
+              <a href="${form.fichaTecnicaActual}" target="_blank" class="d-inline-block mb-3">
+                <i class="bi bi-file-earmark-pdf-fill me-1"></i> Ver ficha técnica actual
+              </a>
+            </c:if>
+            <input type="file" class="form-control" name="fichaTecnica" accept="application/pdf">
+            <p class="text-muted small mt-2 mb-0">Solo PDF. Aparece como descarga en la ficha del producto para el cliente.</p>
+          </div>
+
+          <div class="card card-bodegazo p-4 mb-4">
+            <h5 class="fw-bold mb-3"><i class="bi bi-arrow-repeat text-accent me-2"></i>Galería / vista 360°</h5>
+            <c:if test="${not empty form.id}">
+              <p class="text-muted small">Sube varias fotos de la teja tomadas girándola en el mismo lugar (ej. cada 30-45°) — entre más fotos, más suave se ve el giro. Se agregan a las que ya tenga, en el orden que las subas.</p>
+            </c:if>
+            <input type="file" class="form-control" name="galeria" accept="image/*" multiple>
+            <p class="text-muted small mt-2 mb-0">Puedes seleccionar varias fotos a la vez (Ctrl+clic o Cmd+clic).</p>
+          </div>
+
           <div class="card card-bodegazo p-4">
             <h5 class="fw-bold mb-3">Inventario inicial</h5>
             <div class="mb-3">

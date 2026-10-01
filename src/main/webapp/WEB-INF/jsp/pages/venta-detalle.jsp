@@ -66,16 +66,11 @@
             <span class="text-muted">Método de pago</span><span><c:out value="${venta.metodoPago}"/></span>
           </div>
           <hr>
-          <div class="d-flex justify-content-between small mb-1">
-            <span class="text-muted">Subtotal</span><span><fmt:formatNumber value="${venta.subtotal}" type="currency" currencySymbol="$"/></span>
-          </div>
-          <div class="d-flex justify-content-between small mb-2">
-            <span class="text-muted">IVA</span><span><fmt:formatNumber value="${venta.impuesto}" type="currency" currencySymbol="$"/></span>
-          </div>
           <div class="d-flex justify-content-between">
             <span class="fw-bold">Total</span>
             <span class="fw-bold text-accent fs-5"><fmt:formatNumber value="${venta.total}" type="currency" currencySymbol="$"/></span>
           </div>
+          <p class="text-muted small text-end mb-0">IVA incluido</p>
         </div>
       </div>
     </div>

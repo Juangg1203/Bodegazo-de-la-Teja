@@ -66,7 +66,7 @@
         <div class="row justify-content-end mb-4">
           <div class="col-md-5">
             <div class="card card-bodegazo p-3 text-center">
-              <p class="text-muted small mb-1">Total (sin IVA)</p>
+              <p class="text-muted small mb-1">Total</p>
               <h3 class="fw-bold text-accent mb-0"><fmt:formatNumber value="${totalCarrito}" type="currency" currencySymbol="$"/></h3>
             </div>
           </div>

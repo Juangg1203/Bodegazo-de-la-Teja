@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <jsp:include page="/WEB-INF/jsp/fragments/head.jsp"/>
 <body>
@@ -20,6 +21,59 @@
     <div class="row g-5">
       <div class="col-md-6">
         <c:choose>
+          <c:when test="${fn:length(producto.galeria) >= 2}">
+            <div id="visor360" class="rounded card-bodegazo position-relative" style="cursor: grab; overflow:hidden;">
+              <img id="imagen360" src="${producto.galeria[0]}" class="img-fluid w-100" alt="${producto.nombre} — vista 360°" draggable="false">
+              <span class="badge bg-dark bg-opacity-75 position-absolute top-0 end-0 m-2">
+                <i class="bi bi-arrow-repeat me-1"></i> Arrastra para girar
+              </span>
+            </div>
+            <script>
+              (function () {
+                var fotos = [
+                  <c:forEach var="img" items="${producto.galeria}" varStatus="s">'${img}'<c:if test="${!s.last}">,</c:if></c:forEach>
+                ];
+                var visor = document.getElementById('visor360');
+                var imagen = document.getElementById('imagen360');
+                var indiceActual = 0;
+                var arrastrando = false;
+                var xInicial = 0;
+                var PIXELES_POR_FRAME = 12; // sensibilidad del arrastre
+
+                function mostrarFrame(indice) {
+                  indiceActual = ((indice % fotos.length) + fotos.length) % fotos.length;
+                  imagen.src = fotos[indiceActual];
+                }
+
+                function empezar(x) {
+                  arrastrando = true;
+                  xInicial = x;
+                  visor.style.cursor = 'grabbing';
+                }
+                function mover(x) {
+                  if (!arrastrando) return;
+                  var delta = x - xInicial;
+                  if (Math.abs(delta) >= PIXELES_POR_FRAME) {
+                    var pasos = Math.trunc(delta / PIXELES_POR_FRAME);
+                    mostrarFrame(indiceActual - pasos); // arrastrar a la derecha gira "hacia atrás", como en la mayoría de visores 360
+                    xInicial = x;
+                  }
+                }
+                function terminar() {
+                  arrastrando = false;
+                  visor.style.cursor = 'grab';
+                }
+
+                visor.addEventListener('mousedown', function (e) { empezar(e.clientX); });
+                window.addEventListener('mousemove', function (e) { mover(e.clientX); });
+                window.addEventListener('mouseup', terminar);
+
+                visor.addEventListener('touchstart', function (e) { empezar(e.touches[0].clientX); }, {passive: true});
+                visor.addEventListener('touchmove', function (e) { mover(e.touches[0].clientX); }, {passive: true});
+                visor.addEventListener('touchend', terminar);
+              })();
+            </script>
+          </c:when>
           <c:when test="${not empty producto.imagenPrincipal}">
             <img src="${producto.imagenPrincipal}" class="img-fluid rounded card-bodegazo" alt="${producto.nombre}">
           </c:when>
@@ -30,7 +84,7 @@
           </c:otherwise>
         </c:choose>
 
-        <c:if test="${not empty producto.galeria}">
+        <c:if test="${fn:length(producto.galeria) < 2 && not empty producto.galeria}">
           <div class="row g-2 mt-2">
             <c:forEach var="img" items="${producto.galeria}">
               <div class="col-3">
@@ -71,16 +125,18 @@
         </c:if>
 
         <div class="d-flex gap-2 mt-4">
-          <c:if test="${producto.tipoProducto == 'TEJA_UPVC'}">
-            <a href="${pageContext.request.contextPath}/calculadora-tejas" class="btn btn-accent">
-              <i class="bi bi-calculator-fill me-1"></i> Calcular cantidad necesaria
-            </a>
-          </c:if>
-          <c:if test="${producto.tipoProducto == 'IMPERMEABILIZANTE'}">
-            <a href="${pageContext.request.contextPath}/calculadora-mantos" class="btn btn-accent">
-              <i class="bi bi-calculator-fill me-1"></i> Calcular cantidad necesaria
-            </a>
-          </c:if>
+          <sec:authorize access="hasRole('EMPLEADO')">
+            <c:if test="${producto.tipoProducto == 'TEJA_UPVC'}">
+              <a href="${pageContext.request.contextPath}/calculadora-tejas" class="btn btn-accent">
+                <i class="bi bi-calculator-fill me-1"></i> Calcular cantidad necesaria
+              </a>
+            </c:if>
+            <c:if test="${producto.tipoProducto == 'IMPERMEABILIZANTE'}">
+              <a href="${pageContext.request.contextPath}/calculadora-mantos" class="btn btn-accent">
+                <i class="bi bi-calculator-fill me-1"></i> Calcular cantidad necesaria
+              </a>
+            </c:if>
+          </sec:authorize>
           <sec:authorize access="isAuthenticated()">
             <form action="${pageContext.request.contextPath}/cotizaciones/carrito/agregar" method="post" class="d-flex gap-2">
               <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

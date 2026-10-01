@@ -32,7 +32,7 @@
           <tbody>
             <c:forEach var="m" items="${movimientos.content}">
               <tr>
-                <td><fmt:formatDate value="${m.fecha}" pattern="dd/MM/yyyy HH:mm"/></td>
+                <td><c:out value="${m.fechaFormateada}"/></td>
                 <td>
                   <c:choose>
                     <c:when test="${m.tipoMovimiento == 'ENTRADA'}"><span class="badge bg-success">Entrada</span></c:when>
